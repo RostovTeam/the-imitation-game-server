@@ -10,6 +10,15 @@
 	<div id="chat">
 		<textarea id="message" placeholder="Type a message..."></textarea>
 		<button id="sendMessageBtn">Send</button>
+		<div id="vote_panel" style="display: none;">
+			<button id="player1_vote">Vote Player 1</button>
+			<label>Male: <input type="radio" name="player1" value="male"></radio></label>
+			<label>Female: <input type="radio" name="player1" value="female"></radio></label>
+
+			<button id="player2_vote">Vote PLayer 2</button>
+			<label>Male: <input type="radio" name="player2" value="male"></radio></label>
+			<label>Female: <input type="radio" name="player2" value="female"></radio></label>
+		</div>
 	</div>
 </body>
 <script src="/socket.io/socket.io.js"></script>
@@ -41,10 +50,40 @@
 			isHost = true;
 			connection.open(data.room);
 			socket.emit('room.ready', {});
+
+			document.querySelector('#vote_panel').style.display = 'block';
+			var vote1 = document.querySelector('#player1_vote'),
+				vote2 = document.querySelector('#player2_vote'),
+				gameFinish = 2,
+				gameOver = function() {
+					if (--gameFinish <= 0) {
+						socket.emit('game.vote');
+					}
+				};
+			vote1.onclick = function(event) {
+				vote1.disabled = true;
+				gameOver();
+			};
+			vote2.onclick = function(event) {
+				vote2.disabled = true;
+				gameOver();
+			};
 		});
 
 		socket.on('room.invite', function(data){
 			connection.connect(data.room);
+		});
+
+		socket.on('game.over', function() {
+			if (isHost) {
+				var player1 = removeStreams.pop();
+				player1.play();
+				document.body.appendChild(player1);
+
+				var player2 = removeStreams.pop();
+				player2.play();
+				document.body.appendChild(player2);
+			}
 		});
 
 		connection.onmessage = function(e) {
@@ -58,6 +97,7 @@
 			if (event.type === 'local' || ! isHost) {
 				document.body.appendChild( event.mediaElement );
 			} else {
+				event.mediaElement.pause();
 				removeStreams.push(event.mediaElement);
 			}
 

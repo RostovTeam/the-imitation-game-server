@@ -38,6 +38,9 @@ io.sockets.on('connection', function (client) {
       client.broadcast.to(client.room).emit('room.invite', {room: client.room});
     }
   });
+  client.on('game.vote', function() {
+    io.sockets.in(client.room).emit('game.over');
+  });
   client.on('disconnect', function () {
     console.log(client.id + 'disconnected');
   });
