@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Test</title>
+	<script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+	<button id="connectBtn">Connect</button>
+	<div id="chat">
+		<textarea id="message" placeholder="Type a message..."></textarea>
+		<button id="sendMessageBtn">Send</button>
+	</div>
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script src="http://www.rtcmulticonnection.org/latest.js"></script>
+<script>
+	var domMessage = document.querySelector('#message'),
+		domChat = document.querySelector('#chat'),
+		domConnect = document.querySelector('#connectBtn'),
+		domSend = document.querySelector('#sendMessageBtn'),
+		isHost = false,
+		removeStreams = [];
+
+	domConnect.onclick = function() {
+		var socket = io.connect('/'),
+			connection = new RTCMultiConnection(); // @todo: what is 'channel id' here?
+
+		connection.session = {
+			data: true,
+			audio: true,
+			video: true
+		};
+
+		socket.on('connection.success', function (data) {
+			// connection established, waiting another players
+			domConnect.innerHTML = 'Waiting...';
+		});
+		socket.on('room.created', function (data) {
+			// host should create WebRTCMulticonnection
+			isHost = true;
+			connection.open(data.room);
+			socket.emit('room.ready', {});
+		});
+
+		socket.on('room.invite', function(data){
+			connection.connect(data.room);
+		});
+
+		connection.onmessage = function(e) {
+			var domP = document.createElement('p');
+			domP.innerHTML = e.data;
+			domChat.appendChild(domP);
+		};
+
+		connection.onstream = function(event) {
+			// don't show remote video streams for host
+			if (event.type === 'local' || ! isHost) {
+				document.body.appendChild( event.mediaElement );
+			} else {
+				removeStreams.push(event.mediaElement);
+			}
+
+			// activate chat area
+			domChat.style.display = '';
+			domConnect.style.display = 'none';
+		};
+
+		domSend.onclick = function() {
+			connection.send(domMessage.value);
+
+			var domP = document.createElement('p');
+			domP.innerHTML = domMessage.value;
+			domChat.appendChild(domP);
+
+			domMessage.value = '';
+		};
+
+		// hide chat area until connection established
+		
+		domChat.style.display = 'none';
+	};
+</script>
+</html>
