@@ -4,8 +4,10 @@
 	<meta charset="UTF-8">
 	<title>Test</title>
 	<script src="/socket.io/socket.io.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </head>
 <body>
+	<div class="num_user"></div>
 	<button id="connectBtn">Connect</button>
 	<div id="chat">
 		<textarea id="message" placeholder="Type a message..."></textarea>
@@ -21,7 +23,6 @@
 		</div>
 	</div>
 </body>
-<script src="/socket.io/socket.io.js"></script>
 <script src="http://www.rtcmulticonnection.org/latest.js"></script>
 <script>
 	var domMessage = document.querySelector('#message'),
@@ -44,6 +45,11 @@
 		socket.on('connection.success', function (data) {
 			// connection established, waiting another players
 			domConnect.innerHTML = 'Waiting...';
+		});
+                socket.on('room.addUser',function(data){
+			$('.num_user').html(data.users+"/3");
+			console.log(data.users);
+			domConnect.innertHtml = data.users;
 		});
 		socket.on('room.created', function (data) {
 			// host should create WebRTCMulticonnection
