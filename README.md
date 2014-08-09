@@ -17,7 +17,7 @@ nodejs server.js
 
 Test
 ---------------
-Open in the browser http://localhost:8081/
+Open in the browser http://localhost:8080/
 
 Debug
 ---------------
