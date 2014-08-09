@@ -50,33 +50,40 @@
 			console.log(data.users);
 			domConnect.innertHtml = data.users;
 		});
-		socket.on('room.created', function (data) {
-			// host should create WebRTCMulticonnection
-			isHost = true;
+		socket.on('webrtc.multiconnection.open', function (data) {
+			// it means this client must create a new connection
+			// another clients will be connected later
 			connection.open(data.room);
-			socket.emit('room.ready', {});
-
-			document.querySelector('#vote_panel').style.display = 'block';
-			var vote1 = document.querySelector('#player1_vote'),
-				vote2 = document.querySelector('#player2_vote'),
-				gameFinish = 2,
-				gameOver = function() {
-					if (--gameFinish <= 0) {
-						socket.emit('game.vote');
-					}
-				};
-			vote1.onclick = function(event) {
-				vote1.disabled = true;
-				gameOver();
-			};
-			vote2.onclick = function(event) {
-				vote2.disabled = true;
-				gameOver();
-			};
+			socket.emit('webrtc.multiconnection.ready');
+			socket.emit('game.role');
 		});
 
-		socket.on('room.invite', function(data){
+		socket.on('webrtc.multiconnection.connect', function(data){
 			connection.connect(data.room);
+			socket.emit('game.role');
+		});
+
+		socket.on('game.role', function(data){
+			if (data.role === 'seeker') {
+				isHost = true;
+				document.querySelector('#vote_panel').style.display = 'block';
+				var vote1 = document.querySelector('#player1_vote'),
+					vote2 = document.querySelector('#player2_vote'),
+					gameFinish = 2,
+					gameOver = function() {
+						if (--gameFinish <= 0) {
+							socket.emit('game.vote');
+						}
+					};
+				vote1.onclick = function(event) {
+					vote1.disabled = true;
+					gameOver();
+				};
+				vote2.onclick = function(event) {
+					vote2.disabled = true;
+					gameOver();
+				};
+			}
 		});
 
 		socket.on('game.over', function() {
