@@ -50,5 +50,4 @@ io.sockets.on('connection', function (client) {
   client.on('disconnect', function () {
     console.log(client.id + 'disconnected');
   });
-  client.emit('connection.success', {message: 'Connected. Waiting another players...'});
 });

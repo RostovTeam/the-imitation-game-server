@@ -42,11 +42,10 @@
 			video: true
 		};
 
-		socket.on('connection.success', function (data) {
-			// connection established, waiting another players
-			domConnect.innerHTML = 'Waiting...';
-		});
-                socket.on('room.addUser',function(data){
+		// connection established, waiting another players
+		domConnect.innerHTML = 'Waiting...';
+
+        socket.on('room.addUser',function(data){
 			$('.num_user').html(data.users+"/3");
 			console.log(data.users);
 			domConnect.innertHtml = data.users;
