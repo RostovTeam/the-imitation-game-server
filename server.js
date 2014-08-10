@@ -5,10 +5,10 @@ var app = require('express')(),
 
 var hallRoomId  = 'hallRoom';
 
-server.listen(8080);
+server.listen(8001);
 
 app.get('/', function (req, res) {
-  res.sendfile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/index.html');
 });
 
 io.sockets.on('connection', function (client) {
