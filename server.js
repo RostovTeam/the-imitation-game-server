@@ -33,29 +33,25 @@ io.sockets.on('connection', function (client) {
         liar = io.sockets.connected[group3[1]],
         honest = io.sockets.connected[group3[2]];
 
+      // assign roles and inform the clients about their roles in this new game
       seeker.isSeeker = true;
+      seeker.emit('game.role', {role: 'seeker'});
       liar.isLiar = true;
+      liar.emit('game.role', {role: 'honest'});
       honest.isHonest = true;
-      seeker.emit('webrtc.multiconnection.open', {room: newRoomId});
+      honest.emit('game.role', {role: 'liar'});
+      seeker.emit('webrtc.multiconnection.open', {roomId: newRoomId});
     }
   });
   client.on('webrtc.multiconnection.ready', function () {
-    // just to double check
     if (client.room && client.isSeeker) {
-      client.broadcast.to(client.room).emit('webrtc.multiconnection.connect', {room: client.room});
+      client.broadcast.to(client.room).emit('webrtc.multiconnection.connect', {roomId: client.room});
     }
   });
-  client.on('game.role', function(){
-    if (client.isSeeker) {
-      client.emit('game.role', {role: 'seeker'});
-    } else if (client.isHonest) {
-      client.emit('game.role', {role: 'honest'});
-    } else if (client.isLiar) {
-      client.emit('game.role', {role: 'liar'});
+  client.on('game.vote', function (data) {
+    if (client.room && client.isSeeker) {
+      io.sockets.in(client.room).emit('game.over', {results: data.vote});
     }
-  });
-  client.on('game.vote', function() {
-    io.sockets.in(client.room).emit('game.over');
   });
   client.on('disconnect', function () {
     console.log(client.id + 'disconnected');

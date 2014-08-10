@@ -7,34 +7,27 @@
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </head>
 <body>
-	<div class="num_user"></div>
-	<button id="connectBtn">Connect</button>
-	<div id="chat">
-		<textarea id="message" placeholder="Type a message..."></textarea>
-		<button id="sendMessageBtn">Send</button>
-		<div id="vote_panel" style="display: none;">
-			<button id="player1_vote">Vote Player 1</button>
-			<label>Male: <input type="radio" name="player1" value="male"></radio></label>
-			<label>Female: <input type="radio" name="player1" value="female"></radio></label>
-
-			<button id="player2_vote">Vote PLayer 2</button>
-			<label>Male: <input type="radio" name="player2" value="male"></radio></label>
-			<label>Female: <input type="radio" name="player2" value="female"></radio></label>
-		</div>
+	<div class="js-game-lobby">
+		<div class="num_user"></div>
+		<input type="text" value="" placeholder="Ваше имя в игре..." class="js-player-name" />
+		<button type="button" class="js-start-game">Играть</button>
 	</div>
+	<textarea class="js-textarea" placeholder="Текст вашего сообщения..." style="display: none;"></textarea>
+	<button type="button" class="js-send-message" style="display: none;">Отправить</button>
+	<div class="js-video-panel" style="display: none;"></div>
+	<div class="js-messages-history" style="display: none;"></div>
 </body>
 <script src="http://www.rtcmulticonnection.org/latest.js"></script>
 <script>
-	var domMessage = document.querySelector('#message'),
-		domChat = document.querySelector('#chat'),
-		domConnect = document.querySelector('#connectBtn'),
-		domSend = document.querySelector('#sendMessageBtn'),
-		isHost = false,
-		removeStreams = [];
+	// Connect to imitation game
+	$('.js-start-game').one('click', function(){
+		$(this).text('Ожидание других игроков...');
 
-	domConnect.onclick = function() {
-		var socket = io.connect('/'),
-			connection = new RTCMultiConnection(); // @todo: what is 'channel id' here?
+		var inGame = false,
+			socket = io.connect('/'),
+			connection = new RTCMultiConnection(),
+			role,
+			remoteMediaElements = [];
 
 		connection.session = {
 			data: true,
@@ -42,95 +35,82 @@
 			video: true
 		};
 
-		// connection established, waiting another players
-		domConnect.innerHTML = 'Waiting...';
-
-        socket.on('room.addUser',function(data){
+		socket.on('room.addUser',function(data){
 			$('.num_user').html(data.users+"/3");
-			console.log(data.users);
-			domConnect.innertHtml = data.users;
 		});
+
+		// initiate webrtcmulticonnection between 3 browsers
 		socket.on('webrtc.multiconnection.open', function (data) {
-			// it means this client must create a new connection
-			// another clients will be connected later
-			connection.open(data.room);
+			connection.open(data.roomId);
 			socket.emit('webrtc.multiconnection.ready');
-			socket.emit('game.role');
+		});
+		socket.on('webrtc.multiconnection.connect', function (data){
+			connection.connect(data.roomId);
 		});
 
-		socket.on('webrtc.multiconnection.connect', function(data){
-			connection.connect(data.room);
-			socket.emit('game.role');
+		// getting the role
+		socket.on('game.role', function (data){
+			role = data.role;
+
+			$('.js-textarea, .js-send-message, .js-messages-history, .js-video-panel').show();
+			$('.js-game-lobby').hide();
 		});
 
-		socket.on('game.role', function(data){
-			if (data.role === 'seeker') {
-				isHost = true;
-				document.querySelector('#vote_panel').style.display = 'block';
-				var vote1 = document.querySelector('#player1_vote'),
-					vote2 = document.querySelector('#player2_vote'),
-					gameFinish = 2,
-					gameOver = function() {
-						if (--gameFinish <= 0) {
-							socket.emit('game.vote');
-						}
-					};
-				vote1.onclick = function(event) {
-					vote1.disabled = true;
-					gameOver();
-				};
-				vote2.onclick = function(event) {
-					vote2.disabled = true;
-					gameOver();
-				};
+		setTimeout(function(){
+			if (role === 'seeker' && confirm('Игрок1 лжец?')) {
+				socket.emit('game.vote', {vote: 1});
+			} else {
+				socket.emit('game.vote', {vote: 0});
 			}
-		});
+		}, 1000 * 60); // 1 minute
 
-		socket.on('game.over', function() {
-			if (isHost) {
-				var player1 = removeStreams.pop();
+		socket.on('game.over', function (data) {
+			if (role === 'seeker') {
+				var player1 = remoteMediaElements.pop();
 				player1.play();
-				document.body.appendChild(player1);
+				player1.volume = 0.9;
+				$(player1).appendTo($('.js-video-panel'));
 
-				var player2 = removeStreams.pop();
+				var player2 = remoteMediaElements.pop();
 				player2.play();
-				document.body.appendChild(player2);
+				player2.volume = 0.9;
+				$(player2).appendTo($('.js-video-panel'));
+			}
+
+			if (data.results) {
+				$message = $('<div></div>');
+				$message.text('Угадан!');
+				$message.appendTo($('.js-messages-history'));
 			}
 		});
 
 		connection.onmessage = function(e) {
-			var domP = document.createElement('p');
-			domP.innerHTML = e.data;
-			domChat.appendChild(domP);
+			$message = $('<div></div>');
+			$message.text(e.data);
+			$message.appendTo($('.js-messages-history'));
 		};
 
 		connection.onstream = function(event) {
 			// don't show remote video streams for host
-			if (event.type === 'local' || ! isHost) {
-				document.body.appendChild( event.mediaElement );
+			if (event.type === 'local' || role !== 'seeker') {
+				$(event.mediaElement).appendTo($('.js-video-panel'));
 			} else {
+				event.mediaElement.volume = 0.0;
 				event.mediaElement.pause();
-				removeStreams.push(event.mediaElement);
+				remoteMediaElements.push(event.mediaElement);
 			}
-
-			// activate chat area
-			domChat.style.display = '';
-			domConnect.style.display = 'none';
 		};
 
-		domSend.onclick = function() {
-			connection.send(domMessage.value);
+		$('.js-send-message').on('click', function() {
+			connection.send($('.js-textarea').val());
 
-			var domP = document.createElement('p');
-			domP.innerHTML = domMessage.value;
-			domChat.appendChild(domP);
+			$message = $('<div></div>');
+			$message.text($('.js-textarea').val());
+			$message.appendTo($('.js-messages-history'));
 
-			domMessage.value = '';
-		};
+			$('.js-textarea').val('');
+		});
 
-		// hide chat area until connection established
-		
-		domChat.style.display = 'none';
-	};
+	});
 </script>
 </html>
