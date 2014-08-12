@@ -35,11 +35,14 @@ io.sockets.on('connection', function (client) {
 
       // assign roles and inform the clients about their roles in this new game
       seeker.isSeeker = true;
-      seeker.emit('game.role', {role: 'seeker'});
+      seeker.userid = 'Игрок' + Math.floor(Math.random() * 10000);
+      liar.userid = 'Имитатор' + Math.floor(Math.random() * 10000);
+      honest.userid = 'Имитатор' + Math.floor(Math.random() * 10000);
+      seeker.emit('game.role', {role: 'seeker', name: seeker.userid, intro: 'Ваша задача: Угадать. Мы знаем кто из игроков мужчина, а кто - женщина, а у вас на разгадку есть 5 минут. Задавайте игрокам вопросы, думайте, вычисляйте, догадывайтесь. Удачи!', question: liar.userid + ' лжец?'});
       liar.isLiar = true;
-      liar.emit('game.role', {role: 'honest'});
+      liar.emit('game.role', {role: 'honest', name: liar.userid, intro: 'Ваша задача: Истина. Вам нужно убедить угадывающего, что вы действительно мужчина(/женщина). Ваш оппонент будет лгать, стараясь доказать обратное. Не дайте ему это сделать, докажите свою правоту!'});
       honest.isHonest = true;
-      honest.emit('game.role', {role: 'liar'});
+      honest.emit('game.role', {role: 'liar', name: honest.userid, intro: 'Ваша задача: Имитировать. Отвечать так, как-будто вы - женщина(/мужчина). Ваши ответы должны убедить угадывающего, что именно вы говорите правду, а ваш оппонент лжет.'});
       seeker.emit('webrtc.multiconnection.open', {roomId: newRoomId});
     }
   });
@@ -50,7 +53,7 @@ io.sockets.on('connection', function (client) {
   });
   client.on('game.vote', function (data) {
     if (client.room && client.isSeeker) {
-      io.sockets.in(client.room).emit('game.over', {results: data.vote});
+      io.sockets.in(client.room).emit('game.over', {message: data.vote ? 'Угадал!' : 'Не угадал!'});
     }
   });
   client.on('disconnect', function () {

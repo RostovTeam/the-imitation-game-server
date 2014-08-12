@@ -9,7 +9,6 @@
 <body>
 	<div class="js-game-lobby">
 		<div class="num_user"></div>
-		<input type="text" value="" placeholder="Ваше имя в игре..." class="js-player-name" />
 		<button type="button" class="js-start-game">Играть</button>
 	</div>
 	<textarea class="js-textarea" placeholder="Текст вашего сообщения..." style="display: none;"></textarea>
@@ -27,90 +26,97 @@
 			socket = io.connect('/'),
 			connection = new RTCMultiConnection(),
 			role,
+			name,
+			question,
+			intro,
 			remoteMediaElements = [];
 
-		connection.session = {
-			data: true,
-			audio: true,
-			video: true
-		};
-
-		socket.on('room.addUser',function(data){
-			$('.num_user').html(data.users+"/3");
-		});
-
-		// initiate webrtcmulticonnection between 3 browsers
-		socket.on('webrtc.multiconnection.open', function (data) {
-			connection.open(data.roomId);
-			socket.emit('webrtc.multiconnection.ready');
-		});
-		socket.on('webrtc.multiconnection.connect', function (data){
-			connection.connect(data.roomId);
-		});
-
-		// getting the role
 		socket.on('game.role', function (data){
 			role = data.role;
+			name = data.name;
+			intro = data.intro;
+			question = data.question || '';
+			connection.userid = name;
+			connection.session = {
+				data: true,
+				audio: true,
+				video: true
+			};
 
 			$('.js-textarea, .js-send-message, .js-messages-history, .js-video-panel').show();
 			$('.js-game-lobby').hide();
-		});
 
-		setTimeout(function(){
-			if (role === 'seeker' && confirm('Игрок1 лжец?')) {
-				socket.emit('game.vote', {vote: 1});
-			} else {
-				socket.emit('game.vote', {vote: 0});
-			}
-		}, 1000 * 60); // 1 minute
+			socket.on('room.addUser',function(data){
+				$('.num_user').html(data.users+"/3");
+			});
 
-		socket.on('game.over', function (data) {
-			if (role === 'seeker') {
-				var player1 = remoteMediaElements.pop();
-				player1.play();
-				player1.volume = 0.9;
-				$(player1).appendTo($('.js-video-panel'));
+			// initiate webrtcmulticonnection between 3 browsers
+			socket.on('webrtc.multiconnection.open', function (data) {
+				connection.open(data.roomId);
+				socket.emit('webrtc.multiconnection.ready');
+			});
+			socket.on('webrtc.multiconnection.connect', function (data){
+				connection.connect(data.roomId);
+			});
 
-				var player2 = remoteMediaElements.pop();
-				player2.play();
-				player2.volume = 0.9;
-				$(player2).appendTo($('.js-video-panel'));
-			}
+			setTimeout(function(){
+				if (role === 'seeker' && confirm(question)) {
+					socket.emit('game.vote', {vote: 1});
+				} else {
+					socket.emit('game.vote', {vote: 0});
+				}
+			}, 1000 * 60); // 1 minute
 
-			if (data.results) {
+			socket.on('game.over', function (data) {
+				if (role === 'seeker') {
+					var player1 = remoteMediaElements.pop();
+					player1.play();
+					player1.volume = 0.9;
+					$(player1).appendTo($('.js-video-panel'));
+
+					var player2 = remoteMediaElements.pop();
+					player2.play();
+					player2.volume = 0.9;
+					$(player2).appendTo($('.js-video-panel'));
+				}
+
 				$message = $('<div></div>');
-				$message.text('Угадан!');
+				$message.text(data.message);
 				$message.appendTo($('.js-messages-history'));
-			}
-		});
+			});
 
-		connection.onmessage = function(e) {
+			connection.onmessage = function(e) {
+				$message = $('<div></div>');
+				$message.text(e.userid + ': ' + e.data);
+				$message.appendTo($('.js-messages-history'));
+			};
+
+			connection.onstream = function(event) {
+				// don't show remote video streams for host
+				if (event.type === 'local' || role !== 'seeker') {
+					$(event.mediaElement).appendTo($('.js-video-panel'));
+				} else {
+					event.mediaElement.volume = 0.0;
+					event.mediaElement.pause();
+					event.mediaElement.userid = name;
+					remoteMediaElements.push(event.mediaElement);
+				}
+			};
+
+			$('.js-send-message').on('click', function() {
+				connection.send($('.js-textarea').val());
+
+				$message = $('<div></div>');
+				$message.text('Я: ' + $('.js-textarea').val());
+				$message.appendTo($('.js-messages-history'));
+
+				$('.js-textarea').val('');
+			});
+
 			$message = $('<div></div>');
-			$message.text(e.data);
+			$message.text(intro);
 			$message.appendTo($('.js-messages-history'));
-		};
-
-		connection.onstream = function(event) {
-			// don't show remote video streams for host
-			if (event.type === 'local' || role !== 'seeker') {
-				$(event.mediaElement).appendTo($('.js-video-panel'));
-			} else {
-				event.mediaElement.volume = 0.0;
-				event.mediaElement.pause();
-				remoteMediaElements.push(event.mediaElement);
-			}
-		};
-
-		$('.js-send-message').on('click', function() {
-			connection.send($('.js-textarea').val());
-
-			$message = $('<div></div>');
-			$message.text($('.js-textarea').val());
-			$message.appendTo($('.js-messages-history'));
-
-			$('.js-textarea').val('');
 		});
-
 	});
 </script>
 </html>
