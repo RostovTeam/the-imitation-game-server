@@ -70,11 +70,13 @@
 			socket.on('game.over', function (data) {
 				if (role === 'seeker') {
 					var player1 = remoteMediaElements.pop();
+					player1.muted = false;
 					player1.play();
 					player1.volume = 0.9;
 					$(player1).appendTo($('.js-video-panel'));
 
 					var player2 = remoteMediaElements.pop();
+					player2.muted = false;
 					player2.play();
 					player2.volume = 0.9;
 					$(player2).appendTo($('.js-video-panel'));
@@ -94,9 +96,10 @@
 			connection.onstream = function(event) {
 				// don't show remote video streams for host
 				if (event.type === 'local' || role !== 'seeker') {
+					event.mediaElement.muted = true;
 					$(event.mediaElement).appendTo($('.js-video-panel'));
 				} else {
-					event.mediaElement.volume = 0.0;
+					event.mediaElement.muted = true;
 					event.mediaElement.pause();
 					event.mediaElement.userid = name;
 					remoteMediaElements.push(event.mediaElement);
