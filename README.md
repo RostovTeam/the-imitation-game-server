@@ -5,7 +5,7 @@ Installation
 --------------
 
 ```sh
-npm install node-uuid socket.io express node-inspector
+npm install
 ```
 
 Run
@@ -23,5 +23,6 @@ Debug
 ---------------
 
 ```sh
+npm install node-inspector
 node-inspector & node --debug server.js
 ```

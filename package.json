@@ -1,0 +1,19 @@
+{
+  "name": "the-imitation-game",
+  "version": "0.2.1",
+  "description": "An online game where you guess who is your opponents",
+  "author": "Rostov Team",
+  "main": "lib/foo.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RostovTeam/the-imitation-game-server"
+  },
+  "bugs": {
+    "url": "https://github.com/RostovTeam/the-imitation-game-server/issues"
+  },
+  "dependencies": {
+    "express": "4.8.7",
+    "socket.io": "1.0.6",
+    "node-uuid": "1.4.1"
+  }
+}
