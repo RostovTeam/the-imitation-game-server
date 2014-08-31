@@ -17,26 +17,26 @@
 	<div class="js-messages-history" style="display: none;"></div>
 </body>
 <script src="//cdn.webrtc-experiment.com/RTCMultiConnection-v1.8.js"></script>
-<!--<script src="http://www.rtcmulticonnection.org/latest.js"></script>-->
 <script>
 	// Connect to imitation game
 	$('.js-start-game').one('click', function(){
 		$(this).text('Ожидание других игроков...');
 
-		var inGame = false,
-			socket = io.connect('/'),
-			connection = new RTCMultiConnection(),
+		var socket = io.connect('/'),
 			role,
 			name,
-			question,
 			intro,
 			remoteMediaElements = [];
 
 		socket.on('game.role', function (data){
+			// role in game comes from the server
 			role = data.role;
+			// user name in chat comes from the server
 			name = data.name;
+			// instructions what to do comes from the server and related to role
 			intro = data.intro;
-			question = data.question || '';
+
+			connection = new RTCMultiConnection();
 			connection.userid = name;
 			connection.session = {
 				data: true,
