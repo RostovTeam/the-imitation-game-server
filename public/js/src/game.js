@@ -3,6 +3,8 @@
         this.socket = socket;
         this.gender = gender;
 
+        this.medias = [];
+
         this.isLiar = null;
 
         this.opt = $.extend({
@@ -49,7 +51,17 @@
         };
 
         this.connection.onstream = function (e) {
-            self.emit('stream', e, e.mediaElement, e.type);
+            var media = e.mediaElement;
+            if (e.type = 'local' || self.role !== Game.roles.seeker) {
+                media.muted = true;
+                self.emit('stream', e, media, e.type);
+            } else {
+                media.muted = true;
+                media.pause();
+                media.userid = self.socket.id;
+
+                self.medias[self.socket.id] = media;
+            }
         };
 
         this.socket.on('webrtc.multiconnection.open', function (data) {
@@ -77,6 +89,5 @@
         this.socket.emit('game.vote', {vote: vote});
     };
     Game.prototype.end = function () {
-
     };
 })(jQuery, window.EventEmitter);

@@ -1,0 +1,24 @@
+.hide {
+    display: none;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.clearfix:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.game-info p {
+    display: inline-block;
+    vertical-align: middle;
+    padding-right: 20px;
+    position: relative;
+}

@@ -1,253 +1,62 @@
 <!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Test</title>
-    <!--<script src="/socket.io/socket.io.js"></script>-->
-    <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>-->
-    <script type="text/javascript">window.jQuery || document.write('<script src="/public/lib/jquery.min.js"><\/script>')</script>
-    <style>
-        .hide {
-            display: none;
-        }
+    <head>
+        <meta charset="UTF-8">
+        <title>Test</title>
+        <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>-->
 
-        .left {
-            float: left;
-        }
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="//cdn.webrtc-experiment.com/RTCMultiConnection-v1.8.js"></script>
+        
+        <script type="text/javascript">window.jQuery || document.write('<script src="/public/js/lib/jquery.min.js"><\/script>')</script>
 
-        .right {
-            float: right;
-        }
+        <script src="/public/js/shared.js"></script>
+        <script src="/public/js/src/util.js"></script>
+        <script src="/public/js/src/game.js"></script>
 
-        .clearfix:after {
-            content: "";
-            display: table;
-            clear: both;
-        }
+        <link rel="stylesheet" href="/public/css/style.css"/>
+    </head>
+    <body>
+        <div class="clearfix">
 
-        .game-info p {
-            display: inline-block;
-            vertical-align: middle;
-            padding-right: 20px;
-            position: relative;
-        }
-    </style>
-</head>
-<body>
-    <div class="clearfix">
+            <div id="intro" class="left">
+                <select id="gender" name="gender">
+                    <option selected disabled>Выберите пол</option>
+                    <option value="man">Мужчина</option>
+                    <option value="woman">Женщина</option>
+                </select>
 
-        <div id="intro" class="left">
-            <select id="gender" name="gender">
-                <option selected disabled>Выберите пол</option>
-                <option value="man">Мужчина</option>
-                <option value="woman">Женщина</option>
-            </select>
-
-            <button id="start" class="hide">Играть</button>
-            <div id="interlogger"></div>
-        </div>
-
-        <div id="interaction">
-            <div>
-                <textarea id="message"></textarea>
-
-                <p>
-                    <button id="send_message">Отправить</button>
-                </p>
+                <button id="start" class="hide">Играть</button>
+                <div id="interlogger"></div>
             </div>
-            <div id="messages"></div>
-        </div>
 
-        <div id="info" class="right" style="margin-right: 200px">
-            <div class="game-info">
-                <p>Игроков: <span id="user_count" style="color: red"></span></p>
+            <div id="interaction" class="clearfix" style="width: 800px">
+                <div id="video" class="left"></div>
+                <div class="right">
+                    <div>
+                        <textarea id="text_message"></textarea>
 
-                <p>Текущих игр: <span id="game_count" style="color: red"></span></p>
-
-                <p>Игр за всё время: <span id="all_game_count" style="color: red"></span></p>
+                        <p>
+                            <button id="send_message">Отправить</button>
+                        </p>
+                    </div>
+                    <div id="chat"></div>
+                </div>
             </div>
-            <div>
-                Состояние: <span id="state" style="color: lightblue"></span>
+
+            <div id="info" class="right" style="margin-right: 200px">
+                <div class="game-info">
+                    <p>Игроков: <span id="user_count" style="color: red"></span></p>
+
+                    <p>Текущих игр: <span id="game_count" style="color: red"></span></p>
+
+                    <p>Игр за всё время: <span id="all_game_count" style="color: red"></span></p>
+                </div>
+                <div>
+                    Состояние: <span id="state" style="color: lightblue"></span>
+                </div>
             </div>
         </div>
-    </div>
-
-    <!--<div class="js-game-lobby">-->
-    <!--<div class="num_user"></div>-->
-    <!--<button type="button" class="js-start-game">Играть</button>-->
-    <!--</div>-->
-    <!--<textarea class="js-textarea" placeholder="Текст вашего сообщения..." style="display: none;"></textarea>-->
-    <!--<button type="button" class="js-send-message" style="display: none;">Отправить</button>-->
-    <!--<div class="js-video-panel" style="display: none;"></div>-->
-    <!--<div class="js-messages-history" style="display: none;"></div>-->
-</body>
-<script src="//cdn.webrtc-experiment.com/RTCMultiConnection-v1.8.js"></script>
-<script>
-    var gender;
-
-    var $gender = $('#gender');
-    var $start = $('#start');
-    var $state = $('#state');
-    var $logger = $('#interlogger');
-    var $notice = $state.add($logger);
-
-    var $message = $('#message');
-    $message.$send = $('#send_message');
-
-    var $gameCounter = $('#game_count');
-    var $userCounter = $('#user_count');
-    var $allGameCounter = $('#all_game_count');
-
-    var game = null;
-
-    $gender.change(function () {
-        gender = $(this).val();
-
-        $(this).hide();
-        $start.show();
-    });
-
-    $start.click(function () {
-        $(this).hide();
-
-        $notice.html('Ожидание других игроков...');
-
-        var socket = io.connect('/');
-
-        socket.on('count.game', function (count) {
-            $gameCounter.html(count)
-        });
-        socket.on('count.user', function (count) {
-            $userCounter.html(count);
-        });
-        socket.on('count.allgame', function (count) {
-            $allGameCounter.html(count);
-        });
-
-        var game = new Game(socket, gender);
-
-        game.on('role', function (role, isLiar) {
-            if (role === Game.roles.seeker) {
-                $logger.html('Ваша задача: Угадать. Мы знаем кто из игроков мужчина, а кто - женщина, а у вас на разгадку есть 5 минут. Задавайте игрокам вопросы, думайте, вычисляйте, догадывайтесь. Удачи!');
-            } else if (role === Game.roles.liar) {
-                $logger.html('Ваша задача: Имитировать. Отвечать так, как-будто вы - женщина(/мужчина). Ваши ответы должны убедить угадывающего, что именно вы говорите правду, а ваш оппонент лжет.');
-            } else if (role === Game.roles.honest) {
-                $logger.html('Ваша задача: Истина. Вам нужно убедить угадывающего, что вы действительно мужчина(/женщина). Ваш оппонент будет лгать, стараясь доказать обратное. Не дайте ему это сделать, докажите свою правоту!');
-            }
-        });
-
-        game.on('vote', function (isLiar) {
-            game.vote(confirm(isLiar + ' лжец?'));
-        });
-
-        $message.$send.click(function () {
-            game.message($message.html());
-        });
-    });
-
-    // Connect to imitation game
-    $('').one('click', function () {
-        $(this).text('Ожидание других игроков...');
-
-        var socket = io.connect('/'),
-                role,
-                name,
-                intro,
-                remoteMediaElements = [];
-
-        socket.on('game.role', function (data) {
-            // role in game comes from the server
-            role = data.role;
-            // user name in chat comes from the server
-            name = data.name;
-            // instructions what to do comes from the server and related to role
-            intro = data.intro;
-
-            connection = new RTCMultiConnection();
-            connection.userid = name;
-            connection.session = {
-                data: true,
-                audio: true,
-                video: true
-            };
-
-            $('.js-textarea, .js-send-message, .js-messages-history, .js-video-panel').show();
-            $('.js-game-lobby').hide();
-
-            socket.on('room.addUser', function (data) {
-                $('.num_user').html(data.users + "/3");
-            });
-
-            // initiate webrtcmulticonnection between 3 browsers
-            socket.on('webrtc.multiconnection.open', function (data) {
-                connection.open(data.roomId);
-                socket.emit('webrtc.multiconnection.ready');
-            });
-            socket.on('webrtc.multiconnection.connect', function (data) {
-                connection.connect(data.roomId);
-            });
-
-            setTimeout(function () {
-                if (role === 'seeker' && confirm(question)) {
-                    socket.emit('game.vote', {vote: 1});
-                } else {
-                    socket.emit('game.vote', {vote: 0});
-                }
-            }, 1000 * 60); // 1 minute
-
-            socket.on('game.over', function (data) {
-                if (role === 'seeker') {
-                    var player1 = remoteMediaElements.pop();
-                    player1.muted = false;
-                    player1.play();
-                    player1.volume = 0.9;
-                    $(player1).appendTo($('.js-video-panel'));
-
-                    var player2 = remoteMediaElements.pop();
-                    player2.muted = false;
-                    player2.play();
-                    player2.volume = 0.9;
-                    $(player2).appendTo($('.js-video-panel'));
-                }
-
-                $message = $('<div></div>');
-                $message.text(data.message);
-                $message.appendTo($('.js-messages-history'));
-            });
-
-            connection.onmessage = function (e) {
-                $message = $('<div></div>');
-                $message.text(e.userid + ': ' + e.data);
-                $message.appendTo($('.js-messages-history'));
-            };
-
-            connection.onstream = function (event) {
-                // don't show remote video streams for host
-                if (event.type === 'local' || role !== 'seeker') {
-                    event.mediaElement.muted = true;
-                    $(event.mediaElement).appendTo($('.js-video-panel'));
-                } else {
-                    event.mediaElement.muted = true;
-                    event.mediaElement.pause();
-                    event.mediaElement.userid = name;
-                    remoteMediaElements.push(event.mediaElement);
-                }
-            };
-
-            $('.js-send-message').on('click', function () {
-                connection.send($('.js-textarea').val());
-
-                $message = $('<div></div>');
-                $message.text('Я: ' + $('.js-textarea').val());
-                $message.appendTo($('.js-messages-history'));
-
-                $('.js-textarea').val('');
-            });
-
-            $message = $('<div></div>');
-            $message.text(intro);
-            $message.appendTo($('.js-messages-history'));
-        });
-    });
-</script>
+    </body>
+    <script src="/public/main.js"></script>
 </html>

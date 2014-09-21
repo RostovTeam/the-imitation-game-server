@@ -1,7 +1,7 @@
 var EventEmitter = require('events').EventEmitter;
 var util = require('util');
 
-var shared = require('./../public/shared');
+var shared = require('./../public/js/shared');
 
 var Game = function (io, clients) {
     this.io = io;
@@ -58,6 +58,6 @@ function init() {
 }
 
 Game.prototype.end = function (reason) {
-    this.io.sockets.in(this.room).emit('game.over', Game.reasons[reason]);
+    this.io.sockets.in(this.room).emit('game.over', {reason: Game.reasons[reason]});
     this.emit('ended');
 };

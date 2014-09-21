@@ -1,7 +1,7 @@
 var EventEmitter = require('events').EventEmitter;
 var util = require('util');
 
-var shared = require('./../public/shared');
+var shared = require('./../public/js/shared');
 
 var GameError = require('./error');
 
