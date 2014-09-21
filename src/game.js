@@ -62,7 +62,7 @@ function init() {
 }
 
 Game.prototype.end = function (reason) {
-    this.io.sockets.in(this.room).emit('game.over', {reason: Game.reasons[reason]});
+    this.io.in(this.room).emit('game.over', {reason: Game.reasons[reason]});
     this.emit('ended');
 };
 
