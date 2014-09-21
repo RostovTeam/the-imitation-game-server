@@ -1,6 +1,8 @@
 var EventEmitter = require('events').EventEmitter;
 var util = require('util');
 
+var shared = require('./../public/shared');
+
 var Game = function (io, clients) {
     this.io = io;
     var rand = Math.round(Math.random());
@@ -25,10 +27,9 @@ var Game = function (io, clients) {
 
 util.inherits(Game, EventEmitter);
 
-Game.reasons = {
-    CLIENT_DISCONNECT: 'client_leave_room',
-    GAME_ENDED: 'game_ended'
-};
+Game.reasons = shared.reasons;
+
+Game.roles = shared.roles;
 
 function init() {
     var self = this;
@@ -38,13 +39,13 @@ function init() {
     for (var i = 0, l = this.clients; i < l; i++) {
         this.clients[i].join(this.room);
         this.clients[i].on('disconnect', function () {
-            self.end(Game.reasons.CLIENT_DISCONNECT);
+            self.end(Game.reasons.clientDisconnect);
         });
     }
 
-    this.honest.emit('game.role', {role: 'honest'});
-    this.liar.emit('game.role', {role: 'liar'});
-    this.seeker.emit('game.role', {role: 'seeker', liar: this.liar.id});
+    this.honest.emit('game.role', {role: Game.roles.honest});
+    this.liar.emit('game.role', {role: Game.roles.liar});
+    this.seeker.emit('game.role', {role: Game.roles.seeker, liar: this.liar.id});
 
     this.seeker.emit('webrtc.multiconnection.open', {room: this.room});
     this.seeker.on('webrtc.multiconnection.ready', function () {

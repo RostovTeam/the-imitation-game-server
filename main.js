@@ -17,19 +17,23 @@ app.get('/', function (req, res) {
 var users = new Users();
 var manager = new GameManager();
 
+function allGameCount(){io.sockets.emit('count.allgame', null /*TODO: см ниже*/)}
+function gameCount() {io.sockets.emit('count.game', manager.count());}
+function userCount() {io.sockets.emit('count.users', users.count());}
+
+users.on('add', userCount);
+users.on('left', userCount);
+manager.on('watch', gameCount);
+manager.on('unwatch', gameCount);
+// allGameCount()
+// TODO: Добавить count всех игр за всё время ( сохранять в редис или мемкешд или еще куда нить, например в файл :) )
+
 users.on('ready', function () {
     var clients = users.get();
 
     var game = new Game(io, clients);
     manager.watch(game);
 });
-
-function count() {
-    io.sockets.emit('count', manager.count());
-}
-
-manager.on('watch', count);
-manager.on('unwatch', count);
 
 io.sockets.on('connection', function (client) {
     client.on('gender', function (gender) {

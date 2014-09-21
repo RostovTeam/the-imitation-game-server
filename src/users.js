@@ -1,5 +1,8 @@
 var EventEmitter = require('events').EventEmitter;
 var util = require('util');
+
+var shared = require('./../public/shared');
+
 var GameError = require('./error');
 
 function Users(options) {
@@ -14,15 +17,12 @@ function Users(options) {
 
 util.inherits(Users, EventEmitter);
 
-Users.genders = {
-    MAN: 'man',
-    WOMAN: 'woman'
-};
+Users.genders = shared.genders;
 
 function getList(gender) {
-    if (gender == Users.genders.MAN) {
+    if (gender == Users.genders.man) {
         return this.mans;
-    } else if (gender == Users.genders.WOMAN) {
+    } else if (gender == Users.genders.woman) {
         return this.womans;
     } else {
         throw new GameError("invalid gender", GameError.INVALID_GENDER);
@@ -60,9 +60,12 @@ Users.prototype.add = function (client, gender) {
 
     client.on('disconnect', function () {
         self.remove(client, gender);
+        self.emit('left', client);
     });
 
     list.push(client);
+
+    this.emit('add', client);
 
     if (this.isReady()) {
         this.emit('ready');
@@ -97,6 +100,12 @@ Users.prototype.remove = function (client, gender) {
         remove.call(this, this.mans);
         remove.call(this, this.womans);
     }
+
+    this.emit('removed', client, gender);
+};
+
+Users.prototype.count = function () {
+    return this.mans.length + this.womans.length;
 };
 
 module.exports = Users;
