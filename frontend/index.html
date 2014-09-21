@@ -1,0 +1,42 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="http://localhost/the-imitation-game-server/frontend/result.css">
+<script type="text/javascript" src="http://code.jquery.com/jquery-git2.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="//cdn.webrtc-experiment.com/RTCMultiConnection-v1.8.js"></script>
+<script type="text/javascript" src="http://localhost/the-imitation-game-server/frontend/app.js"></script>
+<script>
+$(function(){
+    //startGame();
+
+    $("#send").on("click", function () {
+        sendMs($("#chatInput").val());
+    });
+    
+    $("#connect").on("click",function(){
+        connect();
+    })
+})
+</script>
+</head>
+<body>
+    <input name="sex" type="radio" value="m">Мужчина
+    <input name="sex"  type="radio"  value="f">Женщина
+<a href="#" id="connect">connect</a>
+<div class="gtimer"></div>
+<div class="videos">
+</div>
+<div class="radios">
+    <div class="radio">
+        <input type="radio" name="role1" />Лжец</div>
+    <div class="radio"></div>
+    <div class="radio">
+        <input type="radio" name="role1" />Лжец</div>
+</div>
+<div class="chatPole"></div>
+<div class="addMs">
+    <textarea id="chatInput"></textarea>
+    <button id="send">send</button>
+</div>
+</body>
+</html>

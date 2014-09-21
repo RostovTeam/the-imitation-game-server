@@ -1,0 +1,81 @@
+.gtimer {
+    font-family: Arial;
+    font-size: 48px;
+    font-weight: bold;
+    text-align: center;
+}
+.videos {
+    overflow:hidden;
+    text-align:center;
+}
+.radios {
+    text-align:center;
+}
+.radio {
+    display:inline-block;
+    width:100px;
+    margin:0 10px;
+}
+video {
+    border:solid 1px #aaa;
+    border-radius:5px;
+    display:inline-block;
+    height:100px;
+    margin:10px;
+    width:200px;
+}
+.chatPole {
+    border: dotted 1px #ccc;
+    border-radius: 5px;
+    height: 400px;
+    padding:0 1%;
+    overflow-y:scroll;
+    width: 98%;
+}
+.addMs {
+    margin: 10px 0;
+}
+.ms {
+    margin: 10px 0;
+    text-align:left;
+}
+.ms.my {
+    text-align:right;
+}
+.ms .author {
+    font-size:10px;
+    color:#ccc;
+}
+.ms.my .author {
+    color:green;
+}
+#chatInput {
+    resize: none;
+    height: 30px;
+    width: 78%;
+    border: none;
+    display: block;
+    outline: solid 1px #ccc;
+    padding: 4px 1%;
+    margin-right: 1%;
+    float: left;
+}
+#send {
+    border: none;
+    margin: 0;
+    margin-left: 1%;
+    padding: 10px 0;
+    width: 18%;
+    display: block;
+    font-size: 16px;
+    line-height: 18px;
+    float: left;
+    text-align: center;
+    background: green;
+    color: #fff;
+    text-decoration: none;
+    font-family: Arial;
+}
+#send:disabled {
+    opacity:0.3;
+}

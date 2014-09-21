@@ -3,60 +3,80 @@ var app = require('express')(),
   io = require('socket.io').listen(server),
   uuid = require('node-uuid');
 
-var hallRoomId  = 'hallRoom';
+var females = [],
+    males = [];
 
 server.listen(8001);
 
 app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/frontend/index.html');
 });
 
 io.sockets.on('connection', function (client) {
-  // on connect all clients are joined 'hall room'
-  client.join(hallRoomId, function () {
-    // how many cients in wait list
-    io.sockets.in(hallRoomId).emit('room.addUser', {users: Object.keys(io.nsps['/'].adapter.rooms[hallRoomId]).length});
+  console.log("New connected");
 
-    // if 'hall room' contains more than 3 clients
-    if(Object.keys(io.nsps['/'].adapter.rooms[hallRoomId]).length >= 3) {
-      // it creates new room, puts the first 3 clients into new room, removed them from 'hall room'
-      var newRoomId = uuid.v1(),
-          group3 = Object.keys(io.nsps['/'].adapter.rooms[hallRoomId]).slice(0, 4);
+  client.on('setSex', function(data){
+    if(data.sex === 'm'){
+      males.push(client);
+    }else{
+      females.push(client);
+    }
+    if(males.length >= 2 && females.length === 1){
+      console.log('add 2 mal');
 
-      group3.forEach(function (id) {
-        io.sockets.connected[id].leave(hallRoomId);
-        io.sockets.connected[id].join(newRoomId);
-        io.sockets.connected[id].room = newRoomId;
+      group = females.concat(males.slice(0,2));
+      males.splice(0,2);
+      females.splice(0,1);
+
+      newRoomId = uuid.v1();
+
+      group.forEach(function(item){
+        io.sockets.connected[item.id].emit('test', {ms: 'стартуем'});
+        io.sockets.connected[item.id].room = newRoomId;
       });
 
-      var seeker = io.sockets.connected[group3[0]],
-        liar = io.sockets.connected[group3[1]],
-        honest = io.sockets.connected[group3[2]];
+    }else if(males.length === 1 && females.length >=2){
+      console.log('add 2 females');
 
-      // assign roles and inform the clients about their roles in this new game
+      group = males.concat(females.slice(0,2));
+      females.splice(0,2);
+      males.splice(0,1);
+
+      newRoomId = uuid.v1();
+      //перемешаем группу
+      group.sort(function() {
+         return Math.random() - 0.6;
+      });
+
+      group.forEach(function(item){
+        console.log(item.id);
+        io.sockets.connected[item.id].room = newRoomId;
+        io.sockets.connected[item.id].join(newRoomId);
+      });
+
+      seeker = io.sockets.connected[group[0].id],
+      liar = io.sockets.connected[group[1].id],
+      honest = io.sockets.connected[group[2].id];
+
       seeker.isSeeker = true;
-      seeker.userid = 'Игрок' + Math.floor(Math.random() * 10000);
-      liar.userid = 'Имитатор' + Math.floor(Math.random() * 10000);
-      honest.userid = 'Имитатор' + Math.floor(Math.random() * 10000);
-      seeker.emit('game.role', {role: 'seeker', name: seeker.userid, intro: 'Ваша задача: Угадать. Мы знаем кто из игроков мужчина, а кто - женщина, а у вас на разгадку есть 5 минут. Задавайте игрокам вопросы, думайте, вычисляйте, догадывайтесь. Удачи!', question: liar.userid + ' лжец?'});
-      liar.isLiar = true;
-      liar.emit('game.role', {role: 'honest', name: liar.userid, intro: 'Ваша задача: Истина. Вам нужно убедить угадывающего, что вы действительно мужчина(/женщина). Ваш оппонент будет лгать, стараясь доказать обратное. Не дайте ему это сделать, докажите свою правоту!'});
-      honest.isHonest = true;
-      honest.emit('game.role', {role: 'liar', name: honest.userid, intro: 'Ваша задача: Имитировать. Отвечать так, как-будто вы - женщина(/мужчина). Ваши ответы должны убедить угадывающего, что именно вы говорите правду, а ваш оппонент лжет.'});
-      seeker.emit('webrtc.multiconnection.open', {roomId: newRoomId});
+
+      seeker.emit('test', {ms: 'seeker'});
+      liar.emit('test', {ms: 'liar'});
+      honest.emit('test', {ms: 'honest'});
+
+      seeker.emit('webrtc.open', {roomId: newRoomId});
+
+
+    }else if(males.length >= 2 && females.length >= 2){
+      console.log('что то пошло не так');
     }
+    //console.log(males.length);
   });
-  client.on('webrtc.multiconnection.ready', function () {
-    if (client.room && client.isSeeker) {
-      client.broadcast.to(client.room).emit('webrtc.multiconnection.connect', {roomId: client.room});
+  
+  client.on('webrtc.ready', function () {
+
+    if (client.room && client.isSeeker) { 
+      client.broadcast.to(client.room).emit('webrtc.connect', {roomId: client.room});
     }
-  });
-  client.on('game.vote', function (data) {
-    if (client.room && client.isSeeker) {
-      io.sockets.in(client.room).emit('game.over', {message: data.vote ? 'Угадал!' : 'Не угадал!'});
-    }
-  });
-  client.on('disconnect', function () {
-    console.log(client.id + 'disconnected');
   });
 });
