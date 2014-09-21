@@ -1,4 +1,5 @@
-var app = require('express')(),
+var express = require('express'),
+    app = express(),
     server = require('http').createServer(app),
     io = require('socket.io').listen(server),
     uuid = require('node-uuid');
@@ -10,6 +11,9 @@ var Users = require('./src/users');
 
 server.listen(8001);
 
+app.use('/public', express.static(__dirname + '/public'));
+
+
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/index.html');
 });
@@ -17,7 +21,7 @@ app.get('/', function (req, res) {
 var users = new Users();
 var manager = new GameManager();
 
-function allGameCount(){io.sockets.emit('count.allgame', null /*TODO: см ниже*/)}
+function allGameCount() {io.sockets.emit('count.allgame', null /*TODO: см ниже*/)}
 function gameCount() {io.sockets.emit('count.game', manager.count());}
 function userCount() {io.sockets.emit('count.users', users.count());}
 

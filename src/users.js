@@ -73,7 +73,7 @@ Users.prototype.add = function (client, gender) {
 };
 
 Users.prototype.isReady = function () {
-    return this.mans.length >= 1 + this.womans.length >= 1 && (this.mans + this.womans >= 3);
+    return this.mans.length >= 1 && this.womans.length >= 1 && (this.mans.length + this.womans.length >= 3);
 };
 
 Users.prototype.get = function () {
@@ -83,22 +83,22 @@ Users.prototype.get = function () {
 
     var man = this.mans.pop();
     var woman = this.womans.pop();
-    var random = random.call(this);
+    var rand = random.call(this);
 
     return {
         man: man,
         woman: woman,
-        random: random
+        random: rand
     }
 };
 
 Users.prototype.remove = function (client, gender) {
     if (gender && Users.genders[gender] !== undefined) {
         var list = getList.call(this, gender);
-        remove.call(this, list);
+        remove.call(this, client, list);
     } else {
-        remove.call(this, this.mans);
-        remove.call(this, this.womans);
+        remove.call(this, client, this.mans);
+        remove.call(this, client, this.womans);
     }
 
     this.emit('removed', client, gender);

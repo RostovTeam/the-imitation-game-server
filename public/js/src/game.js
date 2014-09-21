@@ -1,4 +1,4 @@
-(function ($, EventEmitter) {
+window.Game = (function ($, EventEmitter) {
     function Game(socket, gender, opt) {
         this.socket = socket;
         this.gender = gender;
@@ -25,12 +25,13 @@
 
         this.socket.emit('gender', this.gender);
         this.socket.on('game.role', function (data) {
+            self.socket.id = data.id;
             self.role = data.role;
-            self.isLiar = data.isLiar;
-            self.emit('role', data.role, data.isLiar);
+            self.isLiar = data.liar;
+            self.emit('role', data.role, data.liar);
 
             self.emit('start');
-            start.call(this);
+            start.call(self);
             self.emit('started');
         });
     }
@@ -52,27 +53,28 @@
 
         this.connection.onstream = function (e) {
             var media = e.mediaElement;
-            if (e.type = 'local' || self.role !== Game.roles.seeker) {
-                media.muted = true;
-                self.emit('stream', e, media, e.type);
+            if (e.type == 'local') {
+                if (self.role !== Game.roles.seeker) {
+                    media.muted = true;
+                    self.emit('stream', e, media, e.type);
+                }
             } else {
                 media.muted = true;
                 media.pause();
-                media.userid = self.socket.id;
-
-                self.medias[self.socket.id] = media;
+                self.medias.push(media);
             }
         };
 
-        this.socket.on('webrtc.multiconnection.open', function (data) {
+        this.socket.on('webrtc.channel.open', function (data) {
             self.connection.open(data.room);
-            self.socket.emit('webrtc.multiconnection.ready');
+            self.socket.emit('webrtc.channel.ready');
         });
 
-        this.socket.on('webrtc.multiconnection.connect', function (data) {
+        this.socket.on('webrtc.channel.connect', function (data) {
             self.connection.connect(data.room);
         });
 
+        // TODO: Перенести на сторону сервера !
         if (this.role == Game.roles.seeker) {
             setTimeout(function () {
                 self.emit('vote', self.isLiar);
@@ -80,6 +82,9 @@
         }
 
         this.socket.on('game.over', function (data) {});
+        this.socket.on('game.result', function (data) {
+            self.emit('game.result', data);
+        });
     }
 
     Game.prototype.message = function (message) {
@@ -90,4 +95,6 @@
     };
     Game.prototype.end = function () {
     };
+
+    return Game;
 })(jQuery, window.EventEmitter);

@@ -11,14 +11,13 @@ var messenger = {
     $btn: $('#send_message'),
     $chat: $('#chat'),
     text: function () {
-        return this.$text.html();
+        return this.$text.val();
     },
-    prepare: function (userid, message) {
-        var $message = $('<div/>').text(userid + ': ' + message);
-        return $message;
+    prepare: function (name, message) {
+        return $('<div/>').text(name + ': ' + message);
     },
-    send: function (message) {
-        this.$chat.html(message);
+    message: function (name, message) {
+        this.$chat.append(this.prepare(name, message));
     },
     onsend: function (cb) {
         this.$btn.click(cb);
@@ -40,6 +39,12 @@ $gender.change(function () {
     $start.show();
 });
 
+var socket = io.connect('/');
+
+socket.on('test', function (data) {
+    console.log('test', data);
+});
+
 $start.click(function () {
     $(this).hide();
 
@@ -57,7 +62,7 @@ $start.click(function () {
         $allGameCounter.html(count);
     });
 
-    var game = new Game(socket, gender);
+    game = new Game(socket, gender);
 
     game.on('role', function (role, isLiar) {
         if (role === Game.roles.seeker) {
@@ -75,8 +80,8 @@ $start.click(function () {
 
         if (game.role === Game.roles.seeker) {
             var medias = game.medias;
-            for (var userid in medias) {
-                var media = medias[userid];
+            for (var i = 0, l = medias.length; i < l; i++) {
+                var media = medias[i];
                 media.muted = false;
                 media.volume = 1;
                 media.play();
@@ -84,7 +89,7 @@ $start.click(function () {
             }
         }
 
-        messenger.send(messenger.prepare('', message));
+        messenger.message('', message);
     });
 
     game.on('game.over', function (data) {
@@ -96,7 +101,7 @@ $start.click(function () {
     });
 
     game.on('vote', function (isLiar) {
-        game.vote(confirm(isLiar + ' лжец?'));
+        game.vote(!!confirm(isLiar + ' лжец?'));
     });
 
     game.on('stream', function (e, media, type) {
@@ -107,13 +112,14 @@ $start.click(function () {
     });
 
     game.on('message', function (e, userid, message) {
-        messenger.send(messenger.prepare(userid, message));
+        messenger.message(userid, message);
     });
 
     messenger.onsend(function () {
         var message = messenger.text();
+        message = message ? message : ' ';
 
-        messenger.send(messenger.prepare('Я', message));
+        messenger.message('Я', message);
         game.message(message);
     });
 });
