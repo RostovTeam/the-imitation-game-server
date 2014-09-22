@@ -12,7 +12,7 @@ Run
 --------------
 
 ```sh
-nodejs main.js
+node main.js
 ```
 
 Open in the browser http://localhost:8001/
