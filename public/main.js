@@ -55,7 +55,7 @@ $start.click(function () {
     socket.on('count.game', function (count) {
         $gameCounter.html(count)
     });
-    socket.on('count.user', function (count) {
+    socket.on('count.users', function (count) {
         $userCounter.html(count);
     });
     socket.on('count.allgame', function (count) {
