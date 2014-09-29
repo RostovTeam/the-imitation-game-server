@@ -163,7 +163,7 @@ $start.click(function () {
                 media.volume = 1;
                 media.play();
                 media.className = "col-xs-4";
-                media.style.height($heightChat);
+                media.style.height = $heightChat;
 
                 $video.append(media);
             }
@@ -216,7 +216,7 @@ $start.click(function () {
 
     game.on('stream', function (e, media, type) {
         media.className = "col-xs-4";
-        media.style.height($heightChat);
+        media.style.height = $heightChat;
 
         $video.append(media);
     });
