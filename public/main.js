@@ -94,6 +94,9 @@ var $allGameCounter = $('#all_game_count');
 
 var game = null;
 
+
+heightAll();
+
 $gender.change(function () {
     gender = $(this).val();
 
@@ -125,7 +128,6 @@ $start.click(function () {
     $logger.html('Ожидание других игроков...');
 
     var socket = io.connect('/');
-    heightAll();
 
     socket.on('count.game', function (count) {
         $gameCounter.html(count)
