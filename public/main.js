@@ -5,7 +5,7 @@ var $start = $('#start');
 var $state = $('#state');
 var $logger = $('#interlogger');
 var $gtimer = $('.gtimer');
-var $notice = $state.add($logger);
+var $ifseeker = $('.ifseeker');
 var $vote = $('#vote');
 var $btn_send = $('#send');
 var $suggest = $('#suggest');
@@ -62,6 +62,7 @@ var messenger = {
     },
     message: function (name, message) {
         this.$chat.append(this.prepare(name, message));
+        this.$chat.scrollTop(this.$chat.get(0).scrollHeight);
     },
     onsend: function (cb) {
         $btn_send.click(cb);
@@ -129,6 +130,7 @@ $start.click(function () {
     game = new Game(socket, gender);
     game.on('role', function (role, isLiar) {
         if (role === Game.roles.seeker) {
+            $ifseeker.css('display','block')
             $logger.html('Задача: Угадать.');//Мы знаем кто из игроков мужчина, а кто - женщина, а у вас на разгадку есть 5 минут. Задавайте игрокам вопросы, думайте, вычисляйте, догадывайтесь. Удачи!');
         } else if (role === Game.roles.liar) {
             $logger.html('Задача: Врать.');// Отвечать так, как-будто вы - женщина(/мужчина). Ваши ответы должны убедить угадывающего, что именно вы говорите правду, а ваш оппонент лжет.');
