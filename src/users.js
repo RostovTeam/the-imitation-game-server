@@ -31,7 +31,7 @@ function getList(gender) {
 
 function remove(client, list) {
     for (var i = 0, l = list.length; i < l; i++) {
-        if (list[i] === client.id) {
+        if (list[i].id === client.id) {
             list.splice(i, 1);
             break;
         }

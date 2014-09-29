@@ -8,6 +8,30 @@ var $gtimer = $('.gtimer');
 var $notice = $state.add($logger);
 var $vote = $('#vote');
 var $btn_send = $('#send');
+var $suggest = $('#suggest');
+
+var questions = ['Какой у тебя размер груди?',
+    'Опиши идеального парня',
+    'Опиши идеальную девушку',
+    'Что такое "карбюратор"?',
+    'Что такое "френч"?',
+    'Сколько жмешь от груди?',
+    'Твой любимый футболист',
+    'Где ты покупаешь одежду?',
+    'Чем отличается эпиляция от депиляции?',
+    'Если ваш рост 168 см, а вес 60 кг, то какой нужно покупать размер колготок?',
+    'Что такое "брондирование"?',
+    'Зачем сыпать соль когда варишь яйцо?',
+    'Сколько было мужчин у главной героини "Секс в большом городе"?',
+    'Разрушается ли каллоген при прыжках?',
+    'Вредно ли колоть себе протеин?',
+    'Сколько у тебя было парней?',
+    'Во сколько лет вы собираетесь родить?',
+    'На каком свидании уже можно заниматься сексом?',
+    'Назовите виды женских трусов',
+    'Какая у вас была самая экстремальная ситуация в жизни?',
+    'Сексуальные извращения - вы за или против?',
+    'Как часто вы видите член?'];
 
 var messenger = {
     $text: $('#text_message'),
@@ -50,8 +74,8 @@ var messenger = {
 };
 
 
-var $video = $('.videos');
 
+var $video = $('.videos');
 
 //переменные статистики
 var $gameCounter = $('#game_count');
@@ -77,6 +101,13 @@ $("#sendVote").click(function(){
         game.vote($("input[name=liar]").val());
         $('#myModal2').modal('toggle');
 });
+
+$suggest.click(function(){
+    questions.sort(function() {
+        return Math.random() - 0.6;
+    });
+    messenger.$text.val(questions[0]);
+})
 
 $start.click(function () {
     $(this).hide();
@@ -125,7 +156,7 @@ $start.click(function () {
         messenger.message('', message);
     });
 
-    game.on('game.over', function (data) {
+    game.on('game.over', function (data) {console.log(data);
         var reason = data.reason;
 
         if (reason === Game.reasons.clientDisconnect) {

@@ -68,7 +68,7 @@ function init() {
 
     for (var i = 0, l = this.clients.length; i < l; i++) {
         this.clients[i].join(this.room);
-        this.clients[i].on('disconnect', function () {console.log('disconnect')
+        this.clients[i].on('disconnect', function () {
             self.end(Game.reasons.clientDisconnect);
         });
     }
@@ -100,8 +100,8 @@ function init() {
     });
 }
 
-Game.prototype.end = function (reason) {
-    this.io.in(this.room).emit('game.over', {reason: Game.reasons[reason]});
+Game.prototype.end = function (reason) {console.log(this.room)
+    this.io.in(this.room).emit('game.over', {reason: reason});
     this.emit('ended');
 };
 

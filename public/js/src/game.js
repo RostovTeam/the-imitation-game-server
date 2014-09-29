@@ -22,6 +22,8 @@ window.Game = (function ($, EventEmitter) {
 
     Game.roles = roles;
 
+    Game.reasons = reasons;
+
     util.inherits(Game, EventEmitter);
 
     function init() {
@@ -117,7 +119,9 @@ window.Game = (function ($, EventEmitter) {
         // TODO: Перенести на сторону сервера !
         GlobalTimer.call(self);
 
-        this.socket.on('game.over', function (data) {});
+        this.socket.on('game.over', function (data) {
+            self.emit('game.over',data);
+        });
         this.socket.on('game.result', function (data) {
             self.emit('game.result', data);
         });

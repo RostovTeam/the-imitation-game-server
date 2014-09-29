@@ -59,6 +59,3 @@ io.sockets.on('connection', function (client) {
     });
 });
 
-io.sockets.on('disconnect',function(client){
-    console.log(client);
-})
