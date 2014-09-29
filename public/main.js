@@ -125,6 +125,7 @@ $start.click(function () {
     $logger.html('Ожидание других игроков...');
 
     var socket = io.connect('/');
+    heightAll();
 
     socket.on('count.game', function (count) {
         $gameCounter.html(count)
@@ -214,7 +215,7 @@ $start.click(function () {
     game.on('stream', function (e, media, type) {
         media.className = "col-xs-4";
         media.style.height($heightChat);
-        
+
         $video.append(media);
     });
 
