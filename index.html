@@ -95,7 +95,23 @@
         <div id="info">
             <div class="game-info">
                 <p>Игроков: <span id="user_count" style="color: red"></span></p>
-<!--
+
+                <!--LiveInternet counter-->
+                <script type="text/javascript"><!--
+                    document.write("<a href='//www.liveinternet.ru/click' "+
+                    "target=_blank><img src='//counter.yadro.ru/hit?t25.1;r"+
+                    escape(document.referrer)+((typeof(screen)=="undefined")?"":
+                    ";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+                            screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+                    ";"+Math.random()+
+                    "' alt='' title='LiveInternet: показано число посетителей за"+
+                    " сегодня' "+
+                    "border='0' width='88' height='15'><\/a>")
+                    //-->
+                </script>
+                <!--/LiveInternet-->
+
+                <!--
                 <p>Текущих игр: <span id="game_count" style="color: red"></span></p>
 
                 <p>Игр за всё время: <span id="all_game_count" style="color: red"></span></p>
@@ -112,15 +128,4 @@
 </div>
 </body>
 <script src="/public/main.js"></script>
-<!--LiveInternet counter--><script type="text/javascript"><!--
-document.write("<a href='//www.liveinternet.ru/click' "+
-        "target=_blank><img src='//counter.yadro.ru/hit?t25.1;r"+
-        escape(document.referrer)+((typeof(screen)=="undefined")?"":
-        ";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
-                screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
-        ";"+Math.random()+
-        "' alt='' title='LiveInternet: показано число посетителей за"+
-        " сегодня' "+
-        "border='0' width='88' height='15'><\/a>")
-//--></script><!--/LiveInternet-->
 </html>
