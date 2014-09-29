@@ -35,7 +35,7 @@ window.Game = (function ($, EventEmitter) {
             self.socket.id = data.id;
             self.role = data.role;
             self.users = data.users;
-            self.emit('role', data.role, data.liar);
+            self.emit('role', data.role);
 
             self.emit('start');
             start.call(self);

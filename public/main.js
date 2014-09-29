@@ -2,13 +2,13 @@ var gender;
 
 var $gender = $('#gender');
 var $start = $('#start');
-var $state = $('#state');
 var $logger = $('#interlogger');
 var $gtimer = $('.gtimer');
 var $ifseeker = $('.ifseeker');
 var $vote = $('#vote');
 var $btn_send = $('#send');
 var $suggest = $('#suggest');
+var $heightVideo = 0;
 
 var questions = ['Какой у тебя размер груди?',
     'Опиши идеального парня',
@@ -74,6 +74,15 @@ var messenger = {
     }
 };
 
+var heightAll = function(){
+    percentChat = 48;
+    percentVideo = 32;
+
+    $heightVideo = (self.innerHeight/100)*percentVideo;
+    $heightChat = (self.innerHeight/100)*percentChat;
+
+    messenger.$chat.height(heightChat);
+};
 
 
 var $video = $('.videos');
@@ -128,7 +137,7 @@ $start.click(function () {
     });
 
     game = new Game(socket, gender);
-    game.on('role', function (role, isLiar) {
+    game.on('role', function (role) {
         if (role === Game.roles.seeker) {
             $ifseeker.css('display','table-cell')
             $logger.html('Задача: Угадать.');//Мы знаем кто из игроков мужчина, а кто - женщина, а у вас на разгадку есть 5 минут. Задавайте игрокам вопросы, думайте, вычисляйте, догадывайтесь. Удачи!');
@@ -151,6 +160,8 @@ $start.click(function () {
                 media.volume = 1;
                 media.play();
                 media.className = "col-xs-4";
+                media.style.height($heightChat);
+
                 $video.append(media);
             }
         }
@@ -202,6 +213,8 @@ $start.click(function () {
 
     game.on('stream', function (e, media, type) {
         media.className = "col-xs-4";
+        media.style.height($heightChat);
+        
         $video.append(media);
     });
 
