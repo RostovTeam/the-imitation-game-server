@@ -9,7 +9,7 @@ var Game = require('./src/game');
 var GameManager = require('./src/game.manager');
 var Users = require('./src/users');
 
-server.listen(8001);
+server.listen(8002);
 
 app.use('/public', express.static(__dirname + '/public'));
 
