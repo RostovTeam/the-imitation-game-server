@@ -1,0 +1,78 @@
+body{
+    background: #1f1f1f;
+}
+.logo{
+    background: url("../img/logo.png");
+    background-position: center;
+    width: 180px;
+    height: 81px;
+    margin: 0 auto;
+    float: left;
+}
+#interlogger{
+    color: #fff;
+    text-align: center;
+    float: right;
+    margin-top: 30px;
+    font-size: 20px;
+}
+.gtimer {
+    font-family: Arial;
+    font-size: 48px;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+    color: #fff;
+}
+.videos {
+    overflow:hidden;
+    text-align:center;
+}
+.radios {
+    text-align:center;
+}
+.radio {
+    display:inline-block;
+    width:100px;
+    margin:0 10px;
+}
+video {
+    border-radius:5px;
+}
+video.col-xs-4{
+    padding: 0;
+}
+#chat {
+    background: #fff;
+    color: #333;
+    border: dotted 1px #ccc;
+    border-radius: 5px;
+    height: 400px;
+    padding:0 1%;
+    overflow-y:scroll;
+}
+.addMs {
+    margin-top: 10px;
+}
+.ms {
+    margin: 10px 0;
+    text-align:left;
+}
+.ms.my {
+    text-align:right;
+}
+.ms .author {
+    font-size:10px;
+    color:#ccc;
+}
+.ms.my .author {
+    color:green;
+}
+
+#send:disabled {
+    opacity:0.3;
+}
+.game-info{
+    color: #fff;
+    text-align: center;
+}

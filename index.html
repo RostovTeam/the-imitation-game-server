@@ -1,126 +1,112 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Test</title>
-	<script src="/socket.io/socket.io.js"></script>
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Test</title>
+    <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>-->
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">window.jQuery || document.write('<script src="/public/js/lib/jquery.min.js"><\/script>')</script>
+    <script src="/public/js/lib/event_emitter.js"></script>
+    <script src="/public/js/lib/RTCMultiConnection-v1.8.js"></script>
+    <script src="/public/js/shared.js"></script>
+    <script src="/public/js/src/util.js"></script>
+    <script src="/public/js/src/game.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/public/css/style.css"/>
 </head>
 <body>
-	<div class="js-game-lobby">
-		<div class="num_user"></div>
-		<button type="button" class="js-start-game">Играть</button>
-	</div>
-	<textarea class="js-textarea" placeholder="Текст вашего сообщения..." style="display: none;"></textarea>
-	<button type="button" class="js-send-message" style="display: none;">Отправить</button>
-	<div class="js-video-panel" style="display: none;"></div>
-	<div class="js-messages-history" style="display: none;"></div>
+    <script>
+        $(function(){
+            $('#myModal1').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+        })
+    </script>
+    <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModal1Label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModal1Label">Выберите пол и начните игру</h4>
+                </div>
+                <div class="modal-body">
+                    <iframe width="560" height="315" src="//www.youtube.com/embed/T6CkUR9ELIQ?rel=0" frameborder="0" allowfullscreen></iframe>
+                    <select id="gender" name="gender">
+                        <option selected disabled>Выберите пол</option>
+                        <option value="man">Мужчина</option>
+                        <option value="woman">Женщина</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button id="start" type="button" class="btn btn-primary" data-dismiss="modal">Играть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModal2Label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModal2Label">Кто лжец?</h4>
+                </div>
+                <div class="modal-body" id="vote">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="sendVote">Ответить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12">
+        <div class="logo"></div>
+        <div id="interlogger"></div>
+        <div class="gtimer"></div>
+    </div>
+    <div class="videos col-xs-12">
+    </div>
+
+    <div class="col-xs-12">
+        <div id="chat"></div>
+    </div>
+
+    <div class="col-xs-12">
+        <div class="input-group addMs">
+            <input id="text_message" type="text" class="form-control">
+                          <span class="input-group-btn">
+                            <button id="send" class="btn btn-default" type="button">Send</button>
+                          </span>
+        </div>
+        <!-- /input-group -->
+    </div>
+    <!-- /.col-lg-6 -->
+    <div class="col-xs-12">
+        <div id="info">
+            <div class="game-info">
+                <p>Игроков: <span id="user_count" style="color: red"></span></p>
+<!--
+                <p>Текущих игр: <span id="game_count" style="color: red"></span></p>
+
+                <p>Игр за всё время: <span id="all_game_count" style="color: red"></span></p>
+                -->
+            </div>
+
+            <!--
+            <div>
+                Состояние: <span id="state" style="color: lightblue"></span>
+            </div>
+            -->
+        </div>
+    </div>
+</div>
 </body>
-<script src="//cdn.webrtc-experiment.com/RTCMultiConnection-v1.8.js"></script>
-<script>
-	// Connect to imitation game
-	$('.js-start-game').one('click', function(){
-		$(this).text('Ожидание других игроков...');
-
-		var socket = io.connect('/'),
-			role,
-			name,
-			intro,
-			remoteMediaElements = [];
-
-		socket.on('game.role', function (data){
-			// role in game comes from the server
-			role = data.role;
-			// user name in chat comes from the server
-			name = data.name;
-			// instructions what to do comes from the server and related to role
-			intro = data.intro;
-
-			connection = new RTCMultiConnection();
-			connection.userid = name;
-			connection.session = {
-				data: true,
-				audio: true,
-				video: true
-			};
-
-			$('.js-textarea, .js-send-message, .js-messages-history, .js-video-panel').show();
-			$('.js-game-lobby').hide();
-
-			socket.on('room.addUser',function(data){
-				$('.num_user').html(data.users+"/3");
-			});
-
-			// initiate webrtcmulticonnection between 3 browsers
-			socket.on('webrtc.multiconnection.open', function (data) {
-				connection.open(data.roomId);
-				socket.emit('webrtc.multiconnection.ready');
-			});
-			socket.on('webrtc.multiconnection.connect', function (data){
-				connection.connect(data.roomId);
-			});
-
-			setTimeout(function(){
-				if (role === 'seeker' && confirm(question)) {
-					socket.emit('game.vote', {vote: 1});
-				} else {
-					socket.emit('game.vote', {vote: 0});
-				}
-			}, 1000 * 60); // 1 minute
-
-			socket.on('game.over', function (data) {
-				if (role === 'seeker') {
-					var player1 = remoteMediaElements.pop();
-					player1.muted = false;
-					player1.play();
-					player1.volume = 0.9;
-					$(player1).appendTo($('.js-video-panel'));
-
-					var player2 = remoteMediaElements.pop();
-					player2.muted = false;
-					player2.play();
-					player2.volume = 0.9;
-					$(player2).appendTo($('.js-video-panel'));
-				}
-
-				$message = $('<div></div>');
-				$message.text(data.message);
-				$message.appendTo($('.js-messages-history'));
-			});
-
-			connection.onmessage = function(e) {
-				$message = $('<div></div>');
-				$message.text(e.userid + ': ' + e.data);
-				$message.appendTo($('.js-messages-history'));
-			};
-
-			connection.onstream = function(event) {
-				// don't show remote video streams for host
-				if (event.type === 'local' || role !== 'seeker') {
-					event.mediaElement.muted = true;
-					$(event.mediaElement).appendTo($('.js-video-panel'));
-				} else {
-					event.mediaElement.muted = true;
-					event.mediaElement.pause();
-					event.mediaElement.userid = name;
-					remoteMediaElements.push(event.mediaElement);
-				}
-			};
-
-			$('.js-send-message').on('click', function() {
-				connection.send($('.js-textarea').val());
-
-				$message = $('<div></div>');
-				$message.text('Я: ' + $('.js-textarea').val());
-				$message.appendTo($('.js-messages-history'));
-
-				$('.js-textarea').val('');
-			});
-
-			$message = $('<div></div>');
-			$message.text(intro);
-			$message.appendTo($('.js-messages-history'));
-		});
-	});
-</script>
+<script src="/public/main.js"></script>
 </html>
