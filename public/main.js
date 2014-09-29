@@ -81,7 +81,7 @@ var heightAll = function(){
     $heightVideo = (self.innerHeight/100)*percentVideo;
     $heightChat = (self.innerHeight/100)*percentChat;
 
-    messenger.$chat.height(heightChat);
+    messenger.$chat.height($heightChat);
 };
 
 
