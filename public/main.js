@@ -93,7 +93,7 @@ var $userCounter = $('#user_count');
 var $allGameCounter = $('#all_game_count');
 
 var game = null;
-
+var cashBoxSound = $('#sound_cashbox').get(0);
 
 heightAll();
 
@@ -127,6 +127,8 @@ $start.click(function () {
 
     $logger.html('Ожидание других игроков...');
 
+    cashBoxSound.play();
+
     var socket = io.connect('/');
 
     socket.on('count.game', function (count) {
@@ -141,6 +143,8 @@ $start.click(function () {
 
     game = new Game(socket, gender);
     game.on('role', function (role) {
+        cashBoxSound.play();
+
         if (role === Game.roles.seeker) {
             $ifseeker.css('display','table-cell')
             $logger.html('Задача: Угадать.');//Мы знаем кто из игроков мужчина, а кто - женщина, а у вас на разгадку есть 5 минут. Задавайте игрокам вопросы, думайте, вычисляйте, догадывайтесь. Удачи!');
@@ -152,6 +156,8 @@ $start.click(function () {
     });
 
     game.on('game.result', function (data) {
+        cashBoxSound.play();
+
         var res = data.result;
         var message = res ? 'Угадал' : 'Не угадал';
 
@@ -173,6 +179,8 @@ $start.click(function () {
     });
 
     game.on('game.over', function (data) {console.log(data);
+        cashBoxSound.play();
+
         var reason = data.reason;
 
         if (reason === Game.reasons.clientDisconnect) {
@@ -181,6 +189,8 @@ $start.click(function () {
     });
 
     game.on('enabelChat',function(){
+        cashBoxSound.play();
+
         $btn_send.removeAttr("disabled");
         $btn_send.html("send");
     });
@@ -201,6 +211,8 @@ $start.click(function () {
 
 
     game.on('vote', function (users) {
+        cashBoxSound.play();
+
         for(var i=0; i<users.length; i++){
             template =  '<label class="radio-inline"> \
                           <input type="radio" name="liar" id="inlineRadio1" value="'+ users[i].id +'">'+ users[i].name +'\
@@ -222,6 +234,8 @@ $start.click(function () {
     });
 
     game.on('message', function (e, userid, message) {
+        cashBoxSound.play();
+
         messenger.message(userid, message);
     });
 
@@ -235,3 +249,7 @@ $start.click(function () {
         }
     });
 });
+
+$(function(){
+    cashBoxSound.play();
+})();
