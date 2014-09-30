@@ -100,7 +100,7 @@ function init() {
     });
 }
 
-Game.prototype.end = function (reason) {console.log(this.room)
+Game.prototype.end = function (reason) {
     this.io.in(this.room).emit('game.over', {reason: reason});
     this.emit('ended');
 };
