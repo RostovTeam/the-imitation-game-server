@@ -1,6 +1,6 @@
 window.Game = (function ($, EventEmitter) {
     function Game(socket, gender, opt) {
-        this.gtime = 300;
+        this.gtime = 30;
         this.qtime = null;
 
         this.socket = socket;

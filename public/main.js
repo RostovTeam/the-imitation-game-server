@@ -153,7 +153,7 @@ $start.click(function () {
 
     game.on('game.result', function (data) {
         var res = data.result;
-        var message = res ? 'Угадал' : 'Не угадал';
+        var message = res ?  'Не угадал': 'Угадал';
 
         if (game.role === Game.roles.seeker) {
             var medias = game.medias;
