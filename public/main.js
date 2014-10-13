@@ -93,7 +93,9 @@ var $userCounter = $('#user_count');
 var $allGameCounter = $('#all_game_count');
 
 var game = null;
-
+window.on_getMedia = function(){
+    document.getElementById('sound_cashbox').play();
+};
 
 heightAll();
 
@@ -141,6 +143,7 @@ $start.click(function () {
 
     game = new Game(socket, gender);
     game.on('role', function (role) {
+
         if (role === Game.roles.seeker) {
             $ifseeker.css('display','table-cell')
             $logger.html('Задача: Угадать.');//Мы знаем кто из игроков мужчина, а кто - женщина, а у вас на разгадку есть 5 минут. Задавайте игрокам вопросы, думайте, вычисляйте, догадывайтесь. Удачи!');
@@ -152,6 +155,7 @@ $start.click(function () {
     });
 
     game.on('game.result', function (data) {
+
         var res = data.result;
         var message = res ?  'Не угадал': 'Угадал';
 
@@ -173,6 +177,7 @@ $start.click(function () {
     });
 
     game.on('game.over', function (data) {console.log(data);
+
         var reason = data.reason;
 
         if (reason === Game.reasons.clientDisconnect) {
@@ -181,6 +186,7 @@ $start.click(function () {
     });
 
     game.on('enabelChat',function(){
+
         $btn_send.removeAttr("disabled");
         $btn_send.html("send");
     });
@@ -201,6 +207,7 @@ $start.click(function () {
 
 
     game.on('vote', function (users) {
+
         for(var i=0; i<users.length; i++){
             template =  '<label class="radio-inline"> \
                           <input type="radio" name="liar" id="inlineRadio1" value="'+ users[i].id +'">'+ users[i].name +'\
@@ -222,6 +229,7 @@ $start.click(function () {
     });
 
     game.on('message', function (e, userid, message) {
+
         messenger.message(userid, message);
     });
 

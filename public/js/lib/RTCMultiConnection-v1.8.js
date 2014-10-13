@@ -3135,11 +3135,15 @@ connection.DetectRTC.MediaDevices.forEach(function(device) {
             streaming(currentUserMediaRequest.streams[idInstance].stream, true, currentUserMediaRequest.streams[idInstance].streamid);
         } else {
             n.getMedia = n.webkitGetUserMedia || n.mozGetUserMedia;
-            
+
             // http://dev.w3.org/2011/webrtc/editor/getusermedia.html#navigatorusermedia-interface-extensions
             n.getMedia(hints, streaming, function (error) {
                 options.onerror(error, hints);
             });
+
+            if(typeof window.on_getMedia === 'function') {
+                window.on_getMedia.call(window);
+            }
         }
     }
 
