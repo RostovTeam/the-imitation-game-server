@@ -125,6 +125,9 @@ $suggest.click(function(){
 })
 
 $start.click(function () {
+    if(!$gender.val()){
+        return false;
+    }
     $(this).hide();
 
     $logger.html('Ожидание других игроков...');
