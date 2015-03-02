@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+<meta charset="UTF-8">
+<title></title>
+<script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+<script src="js/jquery.onepage-scroll.js"></script>
+<link href="css/onepage-scroll.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="fancybox/jquery.fancybox.pack.js"></script>
+<link rel="stylesheet" type="text/css" href="fancybox/jquery.fancybox.css?v=2.1.5" media="screen" />
+<style>
+@font-face {
+    font-family: 'PT Sans';
+    src: url('fonts/PTS55F_W.eot');
+    src: local('PT Sans'), url('fonts/PTS55F_W.woff') format('woff'), url('fonts/PTS55F_W.ttf') format('truetype'), url('fonts/PTS55F_W.svg#PTSans-Regular') format('svg');
+}
+
+@font-face {
+    font-family: 'PT Sans Bold';
+    src: url('fonts/PTS75F_W.eot');
+    font-style: normal;
+    font-weight: bold;
+    src: local('PT Sans Bold'), url('fonts/PTS75F_W.woff') format('woff'), url('fonts/PTS75F_W.ttf') format('truetype'), url('fonts/PTS75F_W.svg#PTSans-Bold') format('svg');
+}
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    font-family: "PT Sans";
+}
+
+h1 {
+    font-family: "PT Sans Bold";
+}
+
+input{
+    outline: none;
+}
+
+header {
+    padding-top: 22px;
+    margin: 0 auto;
+    margin-bottom: 60px;
+    width: 1200px;
+    height: 60px;
+}
+
+.logo {
+    float: left;
+    margin-left: 40px;
+    width: 120px;
+}
+
+menu {
+    float: right;
+    margin-right: 40px;
+    margin-top: 25px;
+}
+
+menu li {
+    list-style: none;
+    display: inline-block;
+    margin: 0 12px;
+}
+
+menu li a {
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#page2 menu li a, #page3 menu li a, #page4 menu li a {
+    color: #000;
+}
+
+menu li a:hover {
+    text-decoration: underline;
+}
+
+menu li.active a {
+    text-decoration: underline;
+}
+
+menu li.active a:hover {
+    text-decoration: none;
+}
+
+.page {
+    margin: 0 auto;
+    width: 1200px;
+    position: relative;
+}
+
+#page1 {
+    background: url("img/main_bg.jpg") no-repeat;
+    background-size: cover;
+    width: 100%;
+}
+
+.center_main {
+    width: 500px;
+    margin: 0 auto;
+}
+
+.center_end {
+    width: 500px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.main_logo {
+    margin: 110px 70px 0;
+    width: 360px;
+}
+
+.main_form {
+    margin: 70px 80px;
+}
+
+.email {
+    background: none;
+    border: 1px solid #babbbb;
+    border-right: none;
+    border-radius: 5px 0 0 5px;
+    font-size: 18px;
+    padding: 10px 18px;
+    float: left;
+}
+
+.send {
+    background: #70c667;
+    border-radius: 0 5px 5px 0;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    padding: 11px 36px;
+    float: left;
+    cursor: pointer;
+}
+
+#page2 {
+}
+
+#page2 .left {
+    box-sizing: border-box;
+    float: left;
+    padding-left: 100px;
+    width: 50%;
+}
+
+#page2 .right {
+    box-sizing: border-box;
+    float: right;
+    padding-right: 100px;
+    padding-left: 30px;
+    width: 50%;
+}
+
+#page2 p {
+    display: block;
+    font-size: 18px;
+    line-height: 30px;
+    margin: 38px 0;
+    text-align: justify;
+}
+
+#page2 .left p {
+    width: 420px;
+}
+
+#page2 .left img {
+    margin-top: 10px;
+    width: 480px;
+}
+
+#page2 .right p {
+    width: 430px;
+}
+
+#page2 .right img {
+    margin-bottom: -40px;
+    margin-top: -30px;
+    width: 430px;
+}
+
+#page3 p {
+    display: block;
+    font-size: 18px;
+    line-height: 30px;
+    margin: 30px 0;
+    text-align: justify;
+}
+
+#page3 {
+}
+
+#page3 header {
+    margin-bottom: 120px;
+}
+
+#page3 .left {
+    box-sizing: border-box;
+    float: left;
+    width: 70%;
+}
+
+#page3 .left .you {
+    position: absolute;
+    top: 0px;
+    left: 320px;
+    display: none;
+}
+
+#page3 .left .role {
+    position: absolute;
+    top: -40px;
+    right: 60px;
+    display: none;
+}
+
+#page3 .left .caps {
+    position: absolute;
+    bottom: -10px;
+    left: 80px;
+    display: none;
+}
+
+#page3 .left .animate_block {
+    position: relative;
+    width: 100%;
+}
+
+#page3 .left .interfese {
+    border: 1px solid #bebebe;
+    -webkit-box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.08);
+    -moz-box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.08);
+    box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.08);
+    width: 100%;
+}
+
+#page3 .right {
+    box-sizing: border-box;
+    float: right;
+    padding-left: 30px;
+    width: 30%;
+}
+
+.noactive {
+    display: none;
+}
+
+.slider_n {
+    text-align: center;
+}
+
+.road {
+    border: 1px solid #cacaca;
+    border-radius: 12px;
+    width: 12px;
+    height: 12px;
+    display: inline-block;
+    margin: 2px;
+    cursor: pointer;
+}
+
+.road.active span {
+    border-radius: 8px;
+    margin: 2px;
+    width: 8px;
+    height: 8px;
+    display: block;
+    background: #cacaca;
+}
+
+.end_form{
+    float: left;
+    margin: 100px 0 40px;
+}
+.end_form h1{
+    text-align: center;
+    font-size: 40px;
+}
+
+.social {
+    width: 500px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.social a{
+    border: 1px solid #b3b3b3;
+    border-radius: 80px;
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+}
+
+.social a:hover{
+    border: none;
+    padding: 1px;
+}
+
+.social a img{
+    padding: 5px;
+}
+
+.chamel{
+    position: absolute;
+    top: 45px;
+    height: 450px;
+    right: -350px;
+}
+
+footer {
+    position: absolute;
+    bottom: 10px;
+    left: 49%;
+}
+.fancybox-skin{
+    background: #fff
+}
+#emailtop{
+    color: #fff
+}
+input.error{
+    border-color: #b12b2b;
+}
+input.error::-webkit-input-placeholder { /* WebKit browsers */
+    color:    #b12b2b;
+}
+input.error:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   color:    #b12b2b;
+   opacity:  1;
+}
+input.error::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color:    #b12b2b;
+   opacity:  1;
+}
+input.error:-ms-input-placeholder { /* Internet Explorer 10+ */
+   color:    #b12b2b;
+}
+</style>
+
+<script>
+    $(function () {
+        $("main").onepage_scroll({
+            sectionContainer  : "section",     // sectionContainer accepts any kind of selector in case you don't want to use section
+            easing            : "ease",                  // Easing options accepts the CSS3 easing animation such "ease", "linear", "ease-in",
+            // "ease-out", "ease-in-out", or even cubic bezier value such as "cubic-bezier(0.175, 0.885, 0.420, 1.310)"
+            animationTime     : 1000,             // AnimationTime let you define how long each section takes to animate
+            pagination        : false,                // You can either show or hide the pagination. Toggle true for show, false for hide.
+            updateURL         : false,                // Toggle this true if you want the URL to be updated automatically when the user scroll to each page.
+            beforeMove        : function (index) {
+            },  // This option accepts a callback function. The function will be called before the page moves.
+            afterMove         : function (index) {
+                if (index == 3) {
+                    $(".role").fadeIn(600, function () {
+                        $(".you").fadeIn(600, function () {
+                            $(".caps").fadeIn();
+                        })
+                    });
+                }
+            },   // This option accepts a callback function. The function will be called after the page moves.
+            loop              : false,                     // You can have the page loop back to the top/bottom when the user navigates at up/down on the first/last page.
+            keyboard          : true,                  // You can activate the keyboard controls
+            responsiveFallback: false,        // You can fallback to normal page scroll by defining the width of the browser in which
+            // you want the responsive fallback to be triggered. For example, set this to 600 and whenever
+            // the browser's width is less than 600, the fallback will kick in.
+            direction         : "vertical"         // You can now define the direction of the One Page Scroll animation. Options available are "vertical" and "horizontal". The default value is "vertical".
+        });
+
+        $(".about").on("click", function () {
+            $(".main").moveTo(2);
+        });
+
+        $(".how_to_play").on("click", function () {
+            $(".main").moveTo(3);
+        });
+
+        $(".contacts").on("click", function () {
+            $(".main").moveTo(4);
+        });
+        $(".slider_n .road").on("click", function () {
+            index = $(".slider_n .road").index(this);
+
+            $('.slide_img').addClass("noactive");
+            $('.slide_img').eq(index).removeClass("noactive");
+
+            $('.slide').addClass("noactive");
+            $('.slide').eq(index).removeClass("noactive");
+
+            $('.road').removeClass("active");
+            $('.road').eq(index).addClass("active");
+        })
+
+        $("input.fancybox").fancybox();
+        $("input.fancybox").on("click",function(event){
+            email = ($("#emailtop").val()!="")? $("#emailtop").val(): $("#emailbottom").val();
+
+            if(email==""){
+                event.stopPropagation();
+                $("#emailtop").addClass("error");
+                $("#emailbottom").addClass("error");
+            }
+            else{
+                $.get("save.php/?email="+email);
+            }
+
+        })
+    })
+</script>
+</head>
+<body>
+<main>
+<section id="page1" class="page">
+
+    <div style="display:none">
+        <div id="data">
+            <p style="float: left;font-size: 20px;width: 300px;margin-top: 150px;text-align: center;">
+            Thanks for your consideration!<br>
+            We will wright you soon
+            </p>
+            <img src="img/chamel_joyful.jpg" style="width: 300px;">
+        </div>
+    </div>
+    <header>
+        <img src="img/logo.png" class="logo">
+        <menu>
+            <li>
+                <a class="about">
+                    About
+                </a>
+            </li>
+            <li>
+                <a class="how_to_play">
+                    How to play
+                </a>
+            </li>
+            <li>
+                <a class="contacts">
+                    Contacts
+                </a>
+            </li>
+        </menu>
+    </header>
+    <div class="center_main">
+        <img src="img/logo.png" class="main_logo">
+
+        <form class="main_form">
+            <input type="text" placeholder="E-mail" class="email" id="emailtop">
+            <input type="button" value="Send" class="send fancybox" href="#data">
+        </form>
+    </div>
+    <footer>
+        <img src="img/mouse.png">
+    </footer>
+</section>
+<section id="page2" class="page">
+    <header>
+        <img src="img/logo.png" class="logo">
+        <menu>
+            <li class="active">
+                <a class="about">
+                    About
+                </a>
+            </li>
+            <li>
+                <a class="how_to_play">
+                    How to play
+                </a>
+            </li>
+            <li>
+                <a class="contacts">
+                    Contacts
+                </a>
+            </li>
+        </menu>
+    </header>
+    <div class="page">
+        <div class="left">
+            <h1>About</h1>
+
+            <p>
+                Virtual version of a game that was popular at parties in the beggining of 20th century, that was
+                also a
+                foundation for Alan Turing's famous test.
+            </p>
+
+            <p>
+                Three players. One of them asks questions in the chat to find out other players genders.
+                Two other players must have different genders (one man and one woman).
+            </p>
+            <img src="img/page2_1.jpg">
+        </div>
+        <div class="right">
+            <img src="img/page2_2.jpg">
+
+            <p>
+                Player A's role is to trick the interrogator into making the wrong decision, while player B attempts
+                to assist the interrogator in making the right one. Player A and B can see the video chat at all
+                times while interrogator can see the chat only after he made the final choice.
+            </p>
+
+            <p>
+                After the game you can talk in the video-chat, discuss the game and exchange contacts)
+            </p>
+        </div>
+    </div>
+    <footer>
+        <img src="img/mouse_grey.png">
+    </footer>
+</section>
+<section id="page3" class="page">
+    <header>
+        <img src="img/logo.png" class="logo">
+        <menu>
+            <li>
+                <a class="about">
+                    About
+                </a>
+            </li>
+            <li class="active">
+                <a href="" class="how_to_play">
+                    How to play
+                </a>
+            </li>
+            <li>
+                <a class="contacts">
+                    Contacts
+                </a>
+            </li>
+        </menu>
+    </header>
+    <div class="page">
+        <div class="left">
+            <div class="slide_img">
+                <div class="animate_block">
+                    <img class="you" src="img/you.png">
+                    <img class="role" src="img/role.png">
+                    <img class="caps" src="img/caps.png">
+                    <img class="interfese" src="img/im_inter.jpg">
+                </div>
+            </div>
+            <div class="slide_img noactive">
+                <div class="animate_block">
+                    <img class="interfese" src="img/im_inter_last.jpg">
+                </div>
+            </div>
+        </div>
+        <div class="right">
+
+            <h1>How to play</h1>
+
+            <div class="slide">
+                <p>
+                    In this game you can find new friends or maybe even true love.
+                </p>
+
+                <p>
+                    There are 3 players and one of them is you.
+                </p>
+
+                <p>
+                    If you got a guessing role, you don't see the remaining two players until the end of the game.
+                    You
+                    need
+                    to ask questions to guess their gender. One of them is a man, and another is a woman.
+                </p>
+            </div>
+            <div class="slide noactive">
+                <p>
+                    If you've got an imitator role, it is necessary to deceive the guessing one. You have to answer
+                    in such a manner so that he will guess your gender incorrectly.
+                </p>
+
+                <p>
+                    If your role is to tell the truth, your purpose is to help the guessing one to guess correctly
+                    about your gender and the gender of the imitator.
+                </p>
+
+                <p>
+                    You have an opportunity to see and hear each other after the game, then you can discuss your
+                    game, get acquainted and
+                </p>
+            </div>
+            <div class="slider_n">
+                <div class="road active">
+                    <span></span>
+                </div>
+                <div class="road">
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <img src="img/mouse_grey.png">
+    </footer>
+</section>
+<section id="page4" class="page">
+    <header>
+        <img src="img/logo.png" class="logo">
+        <menu>
+            <li>
+                <a class="about">
+                    About
+                </a>
+            </li>
+            <li>
+                <a  class="how_to_play">
+                    How to play
+                </a>
+            </li>
+            <li class="contacts active">
+                <a>
+                    Contacts
+                </a>
+            </li>
+        </menu>
+    </header>
+    <div class="center_end">
+        <img class="chamel" src="img/chamel_angry.jpg">
+        <div class="end_form">
+            <h1>Subscribe</h1>
+
+            <form class="main_form">
+                <input type="text" placeholder="E-mail" class="email" id="emailbottom">
+                <input type="button" value="Send" class="send fancybox" href="#data">
+            </form>
+        </div>
+        <div class="social">
+            <a href=""><img src="img/fb.png"></a>
+            <a href=""><img src="img/tw.png"></a>
+            <a href=""><img src="img/insta.png"></a>
+        </div>
+    </div>
+</section>
+</main>
+</body>
+</html>
