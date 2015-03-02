@@ -106,7 +106,7 @@ $gender.change(function () {
     $start.show();
 });
 
-var socket = io.connect('/');
+var socket = io.connect(window.location.protocol + '//' + window.location.host);
 
 socket.on('test', function (data) {
     console.log('test', data);
