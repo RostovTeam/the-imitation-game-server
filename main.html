@@ -345,7 +345,7 @@ input.error:-ms-input-placeholder { /* Internet Explorer 10+ */
    color:    #b12b2b;
 }
 
-@media screen and (min-height: 600px and max-height: 700px) {
+@media only screen and (max-height: 700px) {
     #page2 p{
         margin: 10px 0;
     }
@@ -357,6 +357,7 @@ input.error:-ms-input-placeholder { /* Internet Explorer 10+ */
 
 <script>
     $(function () {
+            
         $("main").onepage_scroll({
             sectionContainer  : "section",     // sectionContainer accepts any kind of selector in case you don't want to use section
             easing            : "ease",                  // Easing options accepts the CSS3 easing animation such "ease", "linear", "ease-in",
