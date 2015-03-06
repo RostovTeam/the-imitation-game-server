@@ -2,13 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0c4e012d-7e9a-4250-8d00-6234057a596f" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/img/logo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/img/main_bg.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/img/mouse.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/img/mouse_grey.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/img/page2_1.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/img/page2_2.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/main.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.html" afterPath="$PROJECT_DIR$/main.html" />
     </list>
     <ignored path="the-imitation-game-server.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -34,8 +28,8 @@
       <file leaf-file-name="main.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.08356546" vertical-offset="1275" max-vertical-offset="9000">
-              <caret line="89" column="1" selection-start-line="89" selection-start-column="1" selection-end-line="89" selection-end-column="1" />
+            <state vertical-scroll-proportion="0.54038996" vertical-offset="8807" max-vertical-offset="10245">
+              <caret line="613" column="0" selection-start-line="613" selection-start-column="0" selection-end-line="613" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -112,6 +106,7 @@
     <property name="LayoutCode.rearrangeEntriesHTML" value="false" />
     <property name="FullScreen" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../shop_frontend" />
+    <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file:///Applications/MAMP/htdocs/the-imitation-game-server/img/logo.png" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -120,14 +115,6 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
-      <option name="VMOptions" />
-      <option name="arguments" />
-      <option name="filePath" />
-      <option name="scope" value="ALL" />
-      <option name="testName" />
-      <method />
-    </configuration>
     <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
       <option name="VMOptions" />
       <option name="arguments" />
@@ -138,14 +125,12 @@
       <option name="showConsoleOnStdOut" value="false" />
       <method />
     </configuration>
-    <configuration default="true" type="CucumberJavaScriptRunConfigurationType" factoryName="Cucumber.js">
-      <option name="cucumberJsArguments" />
-      <option name="executablePath" />
+    <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
+      <option name="VMOptions" />
+      <option name="arguments" />
       <option name="filePath" />
-      <method />
-    </configuration>
-    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" config-file="">
-      <envs />
+      <option name="scope" value="ALL" />
+      <option name="testName" />
       <method />
     </configuration>
     <configuration default="true" type="JSTestDriver:ConfigurationType" factoryName="JsTestDriver">
@@ -153,6 +138,16 @@
       <setting name="settingsFile" value="" />
       <setting name="serverType" value="INTERNAL" />
       <setting name="preferredDebugBrowser" value="Chrome" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" config-file="">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="CucumberJavaScriptRunConfigurationType" factoryName="Cucumber.js">
+      <option name="cucumberJsArguments" />
+      <option name="executablePath" />
+      <option name="filePath" />
       <method />
     </configuration>
     <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
@@ -221,6 +216,14 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/main.html">
       <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1335" max-vertical-offset="9945">
+          <caret line="89" column="1" selection-start-line="89" selection-start-column="1" selection-end-line="89" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.html">
+      <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1410" max-vertical-offset="3525">
           <caret line="94" column="9" selection-start-line="94" selection-start-column="9" selection-end-line="94" selection-end-column="9" />
           <folding />
@@ -250,8 +253,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.08356546" vertical-offset="1275" max-vertical-offset="9000">
-          <caret line="89" column="1" selection-start-line="89" selection-start-column="1" selection-end-line="89" selection-end-column="1" />
+        <state vertical-scroll-proportion="0.54038996" vertical-offset="8807" max-vertical-offset="10245">
+          <caret line="613" column="0" selection-start-line="613" selection-start-column="0" selection-end-line="613" selection-end-column="0" />
           <folding />
         </state>
       </provider>

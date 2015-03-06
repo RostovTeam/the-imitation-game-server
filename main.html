@@ -188,7 +188,7 @@ menu li.active a:hover {
     width: 430px;
 }
 
-#page3 p {
+#page3 p, #page4 p {
     display: block;
     font-size: 18px;
     line-height: 30px;
@@ -196,46 +196,43 @@ menu li.active a:hover {
     text-align: justify;
 }
 
-#page3 {
-}
-
-#page3 header {
+#page3 header, #page4 header {
     margin-bottom: 120px;
 }
 
-#page3 .left {
+#page3 .left, #page4 .left {
     box-sizing: border-box;
     float: left;
     width: 70%;
 }
 
-#page3 .left .you {
+#page3 .left .you,#page4 .left .you {
     position: absolute;
     top: 0px;
     left: 320px;
     display: none;
 }
 
-#page3 .left .role {
+#page3 .left .role,#page4 .left .role {
     position: absolute;
     top: -40px;
     right: 60px;
     display: none;
 }
 
-#page3 .left .caps {
+#page3 .left .caps,#page4 .left .caps {
     position: absolute;
     bottom: -10px;
     left: 80px;
     display: none;
 }
 
-#page3 .left .animate_block {
+#page3 .left .animate_block,#page4 .left .animate_block {
     position: relative;
     width: 100%;
 }
 
-#page3 .left .interfese {
+#page3 .left .interfese, #page4 .left .interfese{
     border: 1px solid #bebebe;
     -webkit-box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.08);
     -moz-box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.08);
@@ -243,7 +240,7 @@ menu li.active a:hover {
     width: 100%;
 }
 
-#page3 .right {
+#page3 .right, #page4 .right {
     box-sizing: border-box;
     float: right;
     padding-left: 30px;
@@ -352,7 +349,7 @@ input.error:-ms-input-placeholder { /* Internet Explorer 10+ */
     #page2 p{
         margin: 10px 0;
     }
-    #page3 header{
+    #page3 header, #page4 header{
         margin-bottom: 60px
     }
 }
@@ -499,13 +496,12 @@ input.error:-ms-input-placeholder { /* Internet Explorer 10+ */
             <h1>About</h1>
 
             <p>
-                Virtual version of a game that was popular at parties in the beggining of 20th century, that was
-                also a
-                foundation for Alan Turing's famous test.
+                It’s a virtual version of the game that was popular at parties in the beginning of the 20th century.
+                It also was the foundation for Alan Turing's famous test. Remember the movie? ;)
             </p>
 
             <p>
-                Three players. One of them asks questions in the chat to find out other players genders.
+                Three players take part. One of them asks questions in the chat to find out other player’s genders.
                 Two other players must have different genders (one man and one woman).
             </p>
             <img src="img/page2_1.jpg">
@@ -514,13 +510,13 @@ input.error:-ms-input-placeholder { /* Internet Explorer 10+ */
             <img src="img/page2_2.jpg">
 
             <p>
-                Player A's role is to trick the interrogator into making the wrong decision, while player B attempts
-                to assist the interrogator in making the right one. Player A and B can see the video chat at all
-                times while interrogator can see the chat only after he made the final choice.
+                Player A's role is to trick the interrogator into making the wrong decision, while player B attempts to assist the interrogator in making the right one.
+                Player A and B can see the video chat at all times while interrogator can see the chat only after he’s made the final choice.
+
             </p>
 
             <p>
-                After the game you can talk in the video-chat, discuss the game and exchange contacts
+                After the game you can talk in the video-chat, discuss the game and exchange contacts :)
             </p>
         </div>
     </div>
@@ -559,11 +555,6 @@ input.error:-ms-input-placeholder { /* Internet Explorer 10+ */
                     <img class="interfese" src="img/im_inter.jpg">
                 </div>
             </div>
-            <div class="slide_img noactive">
-                <div class="animate_block">
-                    <img class="interfese" src="img/im_inter_last.jpg">
-                </div>
-            </div>
         </div>
         <div class="right">
 
@@ -579,35 +570,10 @@ input.error:-ms-input-placeholder { /* Internet Explorer 10+ */
                 </p>
 
                 <p>
-                    If you got a guessing role, you don't see the remaining two players until the end of the game.
-                    You
-                    need
-                    to ask questions to guess their gender. One of them is a man, and another is a woman.
-                </p>
-            </div>
-            <div class="slide noactive">
-                <p>
-                    If you've got an imitator role, it is necessary to deceive the guessing one. You have to answer
-                    in such a manner so that he will guess your gender incorrectly.
-                </p>
+                    If you got a guessing role, you don't see the other two players until the end of the game.
+                    You need to ask questions to guess their gender. One of them is a man, and another is a woman.
 
-                <p>
-                    If your role is to tell the truth, your purpose is to help the guessing one to guess correctly
-                    about your gender and the gender of the imitator.
                 </p>
-
-                <p>
-                    You have an opportunity to see and hear each other after the game, then you can discuss your
-                    game, get acquainted and
-                </p>
-            </div>
-            <div class="slider_n">
-                <div class="road active">
-                    <span></span>
-                </div>
-                <div class="road">
-                    <span></span>
-                </div>
             </div>
         </div>
     </div>
@@ -616,6 +582,60 @@ input.error:-ms-input-placeholder { /* Internet Explorer 10+ */
     </footer>
 </section>
 <section id="page4" class="page">
+    <header>
+        <img src="img/logo.png" class="logo">
+        <menu>
+            <li>
+                <a class="about">
+                    About
+                </a>
+            </li>
+            <li class="active">
+                <a href="" class="how_to_play">
+                    How to play
+                </a>
+            </li>
+            <li>
+                <a class="contacts">
+                    Contacts
+                </a>
+            </li>
+        </menu>
+    </header>
+    <div class="page">
+        <div class="left">
+            <div class="slide_img">
+                <div class="animate_block">
+                    <img class="interfese" src="img/im_inter_last.jpg">
+                </div>
+            </div>
+        </div>
+        <div class="right">
+
+            <div class="slide">
+                <p>
+                    If you play as an imitator, you have to trick the guessing player.
+                    Answer so that he guesses your gender incorrectly.
+                </p>
+
+                <p>
+                    If you play as a truth-teller, you have to help the guessing player to find out your gender correctly and get the imitator's gender right.
+                </p>
+
+                <p>
+                    You may see and hear each other after the game. You can discuss the game, get to know each other and exchange contacts.
+                </p>
+                <p>
+                    Good luck and have fun!
+                </p>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <img src="img/mouse_grey.png">
+    </footer>
+</section>
+<section id="page5" class="page">
     <header>
         <img src="img/logo.png" class="logo">
         <menu>
