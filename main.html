@@ -361,7 +361,7 @@ input.error:-ms-input-placeholder { /* Internet Explorer 10+ */
 
 <script>
     $(function () {
-            
+         /*   
         $("main").onepage_scroll({
             sectionContainer  : "section",     // sectionContainer accepts any kind of selector in case you don't want to use section
             easing            : "ease",                  // Easing options accepts the CSS3 easing animation such "ease", "linear", "ease-in",
@@ -398,7 +398,7 @@ input.error:-ms-input-placeholder { /* Internet Explorer 10+ */
 
         $(".contacts").on("click", function () {
             $(".main").moveTo(5);
-        });
+        });*/
         $(".slider_n .road").on("click", function () {
             index = $(".slider_n .road").index(this);
 
@@ -432,7 +432,7 @@ input.error:-ms-input-placeholder { /* Internet Explorer 10+ */
 <body>
 <main>
 <section id="page1" class="page">
-
+    <a name="page1"></a>
     <div style="display:none">
         <div id="data">
             <p style="float: left;font-size: 20px;width: 300px;margin-top: 150px;text-align: center;">
@@ -445,17 +445,17 @@ input.error:-ms-input-placeholder { /* Internet Explorer 10+ */
     <header>
         <menu>
             <li>
-                <a class="about">
+                <a class="about" href="#page1">
                     About
                 </a>
             </li>
             <li>
-                <a class="how_to_play">
+                <a class="how_to_play" href="#page2">
                     How to play
                 </a>
             </li>
             <li>
-                <a class="contacts">
+                <a class="contacts" href="#page4">
                     Contacts
                 </a>
             </li>
@@ -474,21 +474,22 @@ input.error:-ms-input-placeholder { /* Internet Explorer 10+ */
     </footer>
 </section>
 <section id="page2" class="page">
+    <a name="page2"></a>
     <header>
         <img src="img/logo.png" class="logo">
         <menu>
             <li class="active">
-                <a class="about">
+                <a class="about" href="#page1">
                     About
                 </a>
             </li>
             <li>
-                <a class="how_to_play">
+                <a class="how_to_play" href="#page2">
                     How to play
                 </a>
             </li>
             <li>
-                <a class="contacts">
+                <a class="contacts" href="#page4">
                     Contacts
                 </a>
             </li>
@@ -528,21 +529,22 @@ input.error:-ms-input-placeholder { /* Internet Explorer 10+ */
     </footer>
 </section>
 <section id="page3" class="page">
+    <a name="page3"></a>
     <header>
         <img src="img/logo.png" class="logo">
         <menu>
             <li>
-                <a class="about">
+                <a class="about" href="#page1">
                     About
                 </a>
             </li>
             <li class="active">
-                <a href="" class="how_to_play">
+                <a  href="#page2" class="how_to_play">
                     How to play
                 </a>
             </li>
             <li>
-                <a class="contacts">
+                <a class="contacts" href="#page4">
                     Contacts
                 </a>
             </li>
@@ -585,21 +587,22 @@ input.error:-ms-input-placeholder { /* Internet Explorer 10+ */
     </footer>
 </section>
 <section id="page4" class="page">
+    <a name="page4"></a>
     <header>
         <img src="img/logo.png" class="logo">
         <menu>
             <li>
-                <a class="about">
+                <a class="about" href="#page1">
                     About
                 </a>
             </li>
             <li class="active">
-                <a href="" class="how_to_play">
+                <a  href="#page2" class="how_to_play">
                     How to play
                 </a>
             </li>
             <li>
-                <a class="contacts">
+                <a class="contacts" href="#page4">
                     Contacts
                 </a>
             </li>
@@ -639,20 +642,21 @@ input.error:-ms-input-placeholder { /* Internet Explorer 10+ */
     </footer>
 </section>
 <section id="page5" class="page">
+    <a name="page5"></a>
     <header>
         <img src="img/logo.png" class="logo">
         <menu>
             <li>
-                <a class="about">
+                <a class="about" href="#page1">
                     About
                 </a>
             </li>
             <li>
-                <a  class="how_to_play">
+                <a  class="how_to_play" href="#page2">
                     How to play
                 </a>
             </li>
-            <li class="contacts active">
+            <li class="contacts active" href="#page4">
                 <a>
                     Contacts
                 </a>
